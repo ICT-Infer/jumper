@@ -49,4 +49,4 @@ typedef struct _player
 	actions_performable actions_active[3];
 } player;
 
-player player_defaults = {0, 0, 80, 0};
+player player_defaults = {0, 0, 0, 1000000000, 0, 0, 80, 0};
