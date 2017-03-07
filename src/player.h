@@ -27,9 +27,9 @@ typedef enum _actions_performable
 
 typedef struct _player
 {
-	meters_per_second vx;
-	meters_per_second vy;
-	kilograms mass;
+	nanometers_per_second vx;
+	nanometers_per_second vy;
+	micrograms mass;
 
 	/*
 	 * XXX: Array length for actions active corresponds to

@@ -37,11 +37,11 @@ $(OBJDIR)/main.o: src/main.c
 	mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) -c src/main.c -o $(.TARGET)
 
-$(OBJDIR)/player.o: src/player.c src/player.h
+$(OBJDIR)/player.o: src/player.c src/player.h src/units.h
 	mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) -c src/player.c -o $(.TARGET)
 
-$(OBJDIR)/simulation.o: src/simulation.c src/simulation.h
+$(OBJDIR)/simulation.o: src/simulation.c src/simulation.h src/units.h
 	mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) -c src/simulation.c -o $(.TARGET)
 
@@ -49,7 +49,7 @@ $(OBJDIR)/toolassist.o: src/toolassist.c
 	mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) -c src/toolassist.c -o $(.TARGET)
 
-$(OBJDIR)/world.o: src/world.c src/world.h
+$(OBJDIR)/world.o: src/world.c src/world.h src/units.h
 	mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) -c src/world.c -o $(.TARGET)
 
