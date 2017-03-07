@@ -18,17 +18,26 @@
 
 typedef enum _actions_performable
 {
-	WALK_RIGHT,
-	WALK_LEFT,
-	RUN_RIGHT,
-	RUN_LEFT,
+	WALK_POSITIVE,
+	WALK_NEGATIVE,
+	RUN_POSITIVE,
+	RUN_NEGATIVE,
+
 	JUMP
 } actions_performable;
 
 typedef struct _player
 {
+	// Velocity
 	nanometers_per_second vx;
 	nanometers_per_second vy;
+	nanometers_per_second vz;
+
+	// Heading
+	nanometers hx;
+	nanometers hy;
+	nanometers hz;
+
 	micrograms mass;
 
 	/*
@@ -39,3 +48,5 @@ typedef struct _player
 	 */
 	actions_performable actions_active[3];
 } player;
+
+player player_defaults = {0, 0, 80, 0};
