@@ -26,11 +26,9 @@ LDLIBS = -lSDL2
 TRIPLET != $(CC) -dumpmachine
 OUTDIR = out/$(TRIPLET)
 BINDIR = $(OUTDIR)/bin
-OBJS = main.o
+OBJS = main.o player.o world.o simulation.o toolassist.o
 OBJDIR = build/$(TRIPLET)
 OBJS != sh -c "echo '${OBJS}' | sed 's@[^ ]\{1,\}@${OBJDIR}/&@g'"
-
-SUFFIXES = .o
 
 all: $(BINDIR)/$(PROJECT)
 
@@ -38,6 +36,22 @@ all: $(BINDIR)/$(PROJECT)
 $(OBJDIR)/main.o: src/main.c
 	mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) -c src/main.c -o $(.TARGET)
+
+$(OBJDIR)/player.o: src/player.c src/player.h
+	mkdir -p $(OBJDIR)
+	$(CC) $(CFLAGS) -c src/player.c -o $(.TARGET)
+
+$(OBJDIR)/simulation.o: src/simulation.c src/simulation.h
+	mkdir -p $(OBJDIR)
+	$(CC) $(CFLAGS) -c src/simulation.c -o $(.TARGET)
+
+$(OBJDIR)/toolassist.o: src/toolassist.c
+	mkdir -p $(OBJDIR)
+	$(CC) $(CFLAGS) -c src/toolassist.c -o $(.TARGET)
+
+$(OBJDIR)/world.o: src/world.c src/world.h
+	mkdir -p $(OBJDIR)
+	$(CC) $(CFLAGS) -c src/world.c -o $(.TARGET)
 
 $(BINDIR)/$(PROJECT): $(OBJS)
 	mkdir -p $(BINDIR)
