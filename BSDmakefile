@@ -34,6 +34,7 @@ SUFFIXES = .o
 
 all: $(BINDIR)/$(PROJECT)
 
+# https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=217613
 $(OBJDIR)/main.o: src/main.c
 	mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) -c src/main.c -o $(.TARGET)
