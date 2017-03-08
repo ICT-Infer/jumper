@@ -18,14 +18,47 @@
 #include <stdio.h>
 #include <unistd.h>
 
+#include "units.h"
+#include "player.h"
+
 int main (int argc, char *argv[])
 {
+#ifdef DEBUG
+	fprintf(stderr, "This is a DEBUG build.\n\n");
+#endif
+
 	if (SDL_Init(SDL_INIT_VIDEO))
 	{
 		fprintf(stderr, "Failed to initialize SDL. Error: %s\n",
 			SDL_GetError());
 		exit(EXIT_FAILURE);
 	}
+
+#ifdef DEBUG
+	fprintf
+	(
+		stderr,
+		"Speed of light: c = %lu * 1e-9 m/s\n"
+		"\n"
+		"Player defaults\n"
+		"---------------\n"
+		"Velocity x: %lu * 1e-9 m/s\n"
+		"Velocity y: %lu * 1e-9 m/s\n"
+		"Velocity z: %lu * 1e-9 m/s\n"
+		"Heading x:  %lu * 1e-9 m\n"
+		"Heading y:  %lu * 1e-9 m\n"
+		"Heading z:  %lu * 1e-9 m\n"
+		"Mass:       %lu * 1e-9 kg\n"
+		,SPEED_OF_LIGHT
+		,PLAYER_DEFAULTS.vx
+		,PLAYER_DEFAULTS.vy
+		,PLAYER_DEFAULTS.vz
+		,PLAYER_DEFAULTS.hx
+		,PLAYER_DEFAULTS.hy
+		,PLAYER_DEFAULTS.hz
+		,PLAYER_DEFAULTS.mass * 1e3
+	);
+#endif
 
 	SDL_Quit();
 }
