@@ -22,6 +22,16 @@ fi
 if [ -z "$CC" ] ; then
   CC=cc
 fi
+if [ -z "$BUILDTYPE" ] ; then
+  BUILDTYPE=debug
+else
+  BUILDTYPE="$BUILDTYPE"
+fi
+
+if [ ! "$BUILDTYPE" = "debug" ] && [ ! "$BUILDTYPE" = "release" ] ; then
+  echo "Invalid build type." 1>&2
+  exit 1
+fi
 
 if [ -f Makefile ] ; then
   ./create_makefile.py Makefile.new || exit 1
@@ -37,4 +47,4 @@ else
   echo "Makefile updated" 1>&2
 fi
 
-CC="$CC" ${MAKE} $@
+BUILDTYPE="$BUILDTYPE" CC="$CC" ${MAKE} $@

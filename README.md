@@ -6,6 +6,8 @@ Video game.
 
 * [Install dependencies](#install-dependencies)
 * [Build](#build)
+  - [Debug-build](#debug-build)
+  - [Release-build](#release-build)
 * [Build platforms tested](#build-platforms-tested)
   - [FreeBSD 11.0-RELEASE](#freebsd-110-release)
   - [Fedora 25](#fedora-25)
@@ -31,13 +33,21 @@ sudo dnf install gcc make SDL2 SDL2-devel
 
 ## Build
 
+Build script honors the `CC` and `MAKE` environment variables.
+If no value has been provided for these, they will default to
+`cc` and `make` respectively.
+
+### Debug-build
+
 ```bash
 ./make.sh
 ```
 
-Build script honors the `CC` and `MAKE` environment variables.
-If no value has been provided for these, they will default to
-`cc` and `make` respectively.
+### Release-build
+
+```bash
+BUILDTYPE=release ./make.sh
+```
 
 ## Build platforms tested
 

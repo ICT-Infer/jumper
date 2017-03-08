@@ -188,7 +188,9 @@ HOST_TRIPLET != sh -c '$(CC) -dumpmachine || echo $$(uname -m)-unknown-$$(uname 
 
 TARGET_TRIPLET != sh -c '[ ! -z "$(TARGET_TRIPLET)" ] && echo "$(TARGET_TRIPLET)" || echo "$(HOST_TRIPLET)"'
 
-BUILDTYPE != sh -c '[ ! -z "$(BUILDTYPE)" ] && echo "$(BUILDTYPE)" || echo "release"'
+BUILDTYPE != sh -c '[ ! -z "$(BUILDTYPE)" ] && echo "$(BUILDTYPE)" || echo "debug"'
+DEBUG != sh -c '[ "$(BUILDTYPE)" = "debug" ] && echo "-DDEBUG" || echo ""'
+CFLAGS += $(DEBUG)
 
 CONFIGLVL1 = $(HOST_TRIPLET)
 CONFIGLVL2 = $(CONFIGLVL1)/$(MAKE)+$(CC)
