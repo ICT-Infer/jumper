@@ -57,12 +57,12 @@ TODO: Continuous Integration proper.
 ### FreeBSD 11.0-RELEASE
 
 * Base `make` + base `cc` (FreeBSD clang 3.8.0).
+* Base `make` + ports `clang39` (LLVM clang 3.9.1).
 * Ports `bmake` (portable version of NetBSD make 20161126) +
   ports `clang34` (LLVM clang 3.4.2).
 * Ports `gmake` (GNU Make 4.2.1\_1) + ports `gcc49` (GCC 4.9.4).
 * Ports `fmake` (Legacy FreeBSD pmake r250982) +
   ports `pcc` (Portable C Compiler 1.1.0).
-* Ports `dmake` (4.12.20150309) + ports `clang39` (LLVM clang 3.9.1).
 
 ### Fedora 25
 
