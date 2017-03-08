@@ -51,6 +51,8 @@ Another thing it's useful for is that having one common pair of
 build and out file directories allows you to mount a RAM disk
 for all of these writes should you desire to do so.
 
+Then to perform a debug or release build, type the command as shown below.
+
 ### Debug-build
 
 ```bash
