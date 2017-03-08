@@ -46,18 +46,18 @@ if [ -f "$HOME/build/.allow_from_any" ] ; then
   echo "Using build dir \`$OUT'." 1>&2
 fi
 
-if [ -f Makefile ] ; then
-  ./create_makefile.py Makefile.new || exit 1
-  cmp -s Makefile Makefile.new
+if [ -f buildrecipe ] ; then
+  ./create_makefile.py buildrecipe.new || exit 1
+  cmp -s buildrecipe buildrecipe.new
   if [ "$?" -ne "0" ] ; then
-    echo "Makefile updated" 1>&2
-    mv Makefile.new Makefile
+    echo "buildrecipe updated" 1>&2
+    mv buildrecipe.new buildrecipe
   else
-    rm Makefile.new
+    rm buildrecipe.new
   fi
 else
-  ./create_makefile.py Makefile || exit 1
-  echo "Makefile updated" 1>&2
+  ./create_makefile.py buildrecipe || exit 1
+  echo "buildrecipe updated" 1>&2
 fi
 
-BUILDTYPE="$BUILDTYPE" OUT="$OUT" BUILDS="$BUILDS" CC="$CC" ${MAKE} $@
+BUILDTYPE="$BUILDTYPE" OUT="$OUT" BUILDS="$BUILDS" CC="$CC" ${MAKE} -f buildrecipe $@

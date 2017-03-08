@@ -1,6 +1,6 @@
 /build/
 /out/
-/Makefile
+/buildrecipe
 *.new
 *.prev
 *.old

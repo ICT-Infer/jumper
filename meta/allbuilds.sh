@@ -60,20 +60,20 @@ trap most_recent_set_of_values EXIT
 
 host_os=`uname -o`
 
-if [ -f Makefile ] ; then
-  ./create_makefile.py Makefile.new || exit 1
+if [ -f buildrecipe ] ; then
+  ./create_makefile.py buildrecipe.new || exit 1
   set +e
-  cmp -s Makefile Makefile.new
+  cmp -s buildrecipe buildrecipe.new
   if [ "$?" -ne "0" ] ; then
-    echo "Makefile updated" 1>&2
-    mv Makefile.new Makefile
+    echo "buildrecipe updated" 1>&2
+    mv buildrecipe.new buildrecipe
   else
-    rm Makefile.new
+    rm buildrecipe.new
   fi
   set -e
 else
-  ./create_makefile.py Makefile || exit 1
-  echo "Makefile updated" 1>&2
+  ./create_makefile.py buildrecipe || exit 1
+  echo "buildrecipe updated" 1>&2
 fi
 
 perform_build ()
@@ -82,12 +82,12 @@ perform_build ()
   MAKE=$2
 
   BUILDTYPE=
-  CC=$CC BUILDTYPE=$BUILDTYPE OUT="$OUT" BUILDS="$BUILDS" $MAKE distclean_triplet
-  CC=$CC BUILDTYPE=$BUILDTYPE OUT="$OUT" BUILDS="$BUILDS" $MAKE
+  CC=$CC BUILDTYPE=$BUILDTYPE OUT="$OUT" BUILDS="$BUILDS" $MAKE -f buildrecipe distclean_triplet
+  CC=$CC BUILDTYPE=$BUILDTYPE OUT="$OUT" BUILDS="$BUILDS" $MAKE -f buildrecipe
 
   BUILDTYPE=release
-  CC=$CC BUILDTYPE=$BUILDTYPE OUT="$OUT" BUILDS="$BUILDS" $MAKE distclean_triplet
-  CC=$CC BUILDTYPE=$BUILDTYPE OUT="$OUT" BUILDS="$BUILDS" $MAKE
+  CC=$CC BUILDTYPE=$BUILDTYPE OUT="$OUT" BUILDS="$BUILDS" $MAKE -f buildrecipe distclean_triplet
+  CC=$CC BUILDTYPE=$BUILDTYPE OUT="$OUT" BUILDS="$BUILDS" $MAKE -f buildrecipe
 }
 
 perform_build cc make
