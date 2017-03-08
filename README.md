@@ -4,6 +4,7 @@ Video game.
 
 ## Table of Contents
 
+* [Install dependencies](#install-dependencies)
 * [Build](#build)
 * [Build platforms tested](#build-platforms-tested)
   - [FreeBSD 11.0-RELEASE](#freebsd-110-release)
@@ -11,6 +12,20 @@ Video game.
 * [Clean](#clean)
 * [Distclean triplet](#distclean-triplet)
 * [Distclean](#distclean)
+
+## Install dependencies
+
+FreeBSD 11.0-RELEASE:
+
+```bash
+doas pkg install sdl2
+```
+
+Fedora 25:
+
+```bash
+sudo dnf install gcc make SDL2 SDL2-devel
+```
 
 ## Build
 
@@ -44,6 +59,14 @@ The build process has been tested with the following configurations:
   - `CC=gcc49 gmake clean` ok
   - `CC=gcc49 gmake distclean_triplet` ok
   - `gmake distclean` ok
+
+### Fedora 25
+
+* Packages `make` (GNU make 4.1) + packages `gcc` (GCC 6.3.1)
+  - `./build.sh` ok
+  - `make clean` ok
+  - `make distclean_triplet` ok
+  - `make distclean` ok
 
 ## Run
 
