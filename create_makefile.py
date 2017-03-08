@@ -75,7 +75,7 @@ class Source (FileRef):
 
         self.directly_associated_fnames = []
 
-        if search_assoc:
+        if not(search_assoc is None):
 
             self.directly_associated_fnames = \
                 self.get_directly_associated_fnames()
@@ -126,7 +126,7 @@ class Cfile (Source):
     get_directly_associated_fnames = c_style_local_include_fnames
 
 class Hfile (Source):
-    
+
     get_directly_associated_fnames = c_style_local_include_fnames
 
 class Buildable (FileRef):
