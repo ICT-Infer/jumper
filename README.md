@@ -8,6 +8,7 @@ Video game.
 * [Build](#build)
 * [Build platforms tested](#build-platforms-tested)
   - [FreeBSD 11.0-RELEASE](#freebsd-110-release)
+  - [Fedora 25](#fedora-25)
 * [Run](#run)
 * [Clean](#clean)
 * [Distclean triplet](#distclean-triplet)
