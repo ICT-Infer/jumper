@@ -56,7 +56,7 @@ int main (int argc, char *argv[])
 		"Orientation yaxis: (%lu, %lu, %lu) [1e-9   m] x 3\n"
 		"Orientation zaxis: (%lu, %lu, %lu) [1e-9   m] x 3\n"
 		"---------------\n"
-		"Mass:                    %lu  [1e-9 kg]\n"
+		"Mass:                    %lu  [1e-9  kg]\n"
 		"---------------\n"
 		"Actions active:               (%u %u %u)\n"
 
