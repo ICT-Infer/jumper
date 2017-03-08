@@ -9,8 +9,6 @@ Video game.
   - [Debug-build](#debug-build)
   - [Release-build](#release-build)
 * [Build platforms tested](#build-platforms-tested)
-  - [FreeBSD 11.0-RELEASE](#freebsd-110-release)
-  - [Fedora 25](#fedora-25)
 * [Run](#run)
 * [Clean](#clean)
   - [Clean for target platform](#clean-for-target-platform)
@@ -51,45 +49,24 @@ BUILDTYPE=release ./make.sh
 
 ## Build platforms tested
 
-The build process has been tested with the following configurations:
+Currently the following build platforms are tested by manually
+triggering the script `meta/allbuilds.sh`.
+
+TODO: Continuous Integration proper.
 
 ### FreeBSD 11.0-RELEASE
 
 * Base `make` + base `cc` (FreeBSD clang 3.8.0).
-  - `./make.sh` ok
-  - `./make.sh clean` ok
-  - `./make.sh distclean_triplet` ok
-  - `./make.sh distclean` ok
 * Ports `bmake` (portable version of NetBSD make 20161126) +
-  ports `clang34` (LLVM clang 3.4.2)
-  - `MAKE=bmake CC=clang34 ./make.sh` ok
-  - `MAKE=bmake CC=clang34 ./make.sh clean` ok
-  - `MAKE=bmake CC=clang34 ./make.sh distclean_triplet` ok
-  - `MAKE=bmake ./make.sh distclean` ok
-* Ports `gmake` (GNU Make 4.2.1\_1) + ports `gcc49` (GCC 4.9.4)
-  - `MAKE=gmake CC=gcc49 ./make.sh` ok
-  - `MAKE=gmake CC=gcc49 ./make.sh clean` ok
-  - `MAKE=gmake CC=gcc49 ./make.sh distclean_triplet` ok
-  - `MAKE=gmake ./make.sh distclean` ok
+  ports `clang34` (LLVM clang 3.4.2).
+* Ports `gmake` (GNU Make 4.2.1\_1) + ports `gcc49` (GCC 4.9.4).
 * Ports `fmake` (Legacy FreeBSD pmake r250982) +
-  ports `pcc` (Portable C Compiler 1.1.0)
-  - `MAKE=fmake CC=pcc ./make.sh` ok, but `pcc` does not support dumpmachine.
-  - `MAKE=fmake CC=pcc ./make.sh clean` ok, but
-    `fmake` mentions "no input files"
-  - `MAKE=fmake CC=pcc ./make.sh distclean_triplet` ok, but
-    `fmake` mentions "no input files"
-  - `MAKE=fmake ./make.sh distclean` ok
-* Ports `dmake` (4.12.20150309) + ports `clang39` (LLVM clang 3.9.1)
-  - `MAKE=dmake CC=clang39 ./make.sh` failed;
-    `dmake` did not like the `Makefile`
+  ports `pcc` (Portable C Compiler 1.1.0).
+* Ports `dmake` (4.12.20150309) + ports `clang39` (LLVM clang 3.9.1).
 
 ### Fedora 25
 
-* Packages `make` (GNU Make 4.1) + packages `gcc` (GCC 6.3.1)
-  - `./make.sh` ok
-  - `./make.sh clean` ok
-  - `./make.sh distclean_triplet` ok
-  - `./make.sh distclean` ok
+* Packages `make` (GNU Make 4.1) + packages `gcc` (GCC 6.3.1).
 
 ## Run
 
