@@ -46,13 +46,6 @@ class FileRef:
 
     def get_all_deps (self, cur_depth = 0):
 
-        if debug:
-
-            sys.stderr.write(
-"""
-{}{} -- {}, {}
-""".format(' ' * (2 * cur_depth), self.__repr__(), self.direct_deps, self.directly_associated))
-
         deps = []
 
         for fref in self.direct_deps + self.directly_associated:
@@ -93,10 +86,6 @@ class Source (FileRef):
 
 def c_style_local_include_fnames (self):
 
-    if debug:
-
-        sys.stderr.write(self.__repr__() + '\n')
-
     local_inc_fnames = []
 
     with open(str(self), 'r') as f:
@@ -107,17 +96,9 @@ def c_style_local_include_fnames (self):
 
                 fname = os.path.join('src', line[10:-2])
 
-                if debug:
-
-                    sys.stderr.write('  ' + fname + '\n')
-
                 local_inc_fnames.append(fname)
 
     local_inc_fnames.sort()
-
-    if debug:
-
-        sys.stderr.write('= ' + str(local_inc_fnames) + '\n')
 
     return local_inc_fnames
 
@@ -188,10 +169,6 @@ for file in os.listdir('src'):
 cfiles.sort()
 hfiles.sort()
 
-if debug:
-
-    sys.stderr.write('\n{}\n{}\n'.format(str(cfiles), str(hfiles)))
-
 for fref in cfiles + hfiles:
 
     fref.refresh_directly_associated()
@@ -219,12 +196,7 @@ for ofile in ofiles:
 
 if debug:
 
-    sys.stderr.write('OBJS = {}\n'.format(mf_ofiles))
-
-    for mf_ofile, mf_deps, mf_ddeps in mf_ofile_deps_ddeps_tuples:
-
-        sys.stderr.write('{}: {}\n'.format(mf_ofile, mf_deps))
-        sys.stderr.write('\t{}\n'.format(mf_ddeps))
+    sys.stderr.write('No current debug info to show.\n')
 
     sys.exit(0)
 
