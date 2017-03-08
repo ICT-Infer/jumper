@@ -63,7 +63,7 @@ The build process has been tested with the following configurations:
 
 ### Fedora 25
 
-* Packages `make` (GNU make 4.1) + packages `gcc` (GCC 6.3.1)
+* Packages `make` (GNU Make 4.1) + packages `gcc` (GCC 6.3.1)
   - `./build.sh` ok
   - `make clean` ok
   - `make distclean_triplet` ok
