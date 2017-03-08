@@ -60,6 +60,12 @@ The build process has been tested with the following configurations:
   - `CC=gcc49 gmake clean` ok
   - `CC=gcc49 gmake distclean_triplet` ok
   - `gmake distclean` ok
+* Ports `fmake` (Legacy FreeBSD pmake r250982) +
+  ports `pcc` (Portable C Compiler 1.1.0)
+  - `MAKE=fmake CC=pcc ./build.sh` ok, but `pcc` does not support dumpmachine.
+  - `CC=pcc fmake clean` ok, but `fmake` mentions "no input files"
+  - `CC=pcc fmake distclean_triplet` ok, but `fmake` mentions "no input files"
+  - `fmake distclean` ok
 * Ports `dmake` (4.12.20150309) + ports `clang39` (LLVM clang 3.9.1)
   - `MAKE=dmake CC=clang39 ./build.sh` failed;
     `dmake` did not like the `Makefile`
