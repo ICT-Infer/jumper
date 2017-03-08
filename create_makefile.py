@@ -204,7 +204,9 @@ OBJS = {}
 OBJDIR = $(BUILDS)/$(CONFIGID)
 OBJS != sh -c "echo '$(OBJS)' | sed 's@[^ ]\{{1,\}}@$(OBJDIR)/&@g'"
 
-all: $(BINDIR)/$(PROJECT)
+MAIN_EXECUTABLE = $(BINDIR)/$(PROJECT)
+
+all: $(MAIN_EXECUTABLE)
 """.format(project, ' '.join([str(ofile) for ofile in ofiles])))
 
 for ofile in ofiles:
@@ -220,7 +222,7 @@ $(OBJDIR)/{}: {}
 
 makefile.write(
 """
-$(BINDIR)/$(PROJECT): $(OBJS)
+$(MAIN_EXECUTABLE): $(OBJS)
 	mkdir -p $(BINDIR)
 	$(CC) $(LDFLAGS) $> $^ -o $@ $(LDLIBS)
 
@@ -231,7 +233,7 @@ clean:
 
 .PHONY: distclean_triplet
 distclean_triplet: clean
-	test -f $(BINDIR)/$(PROJECT) && rm $(BINDIR)/$(PROJECT) || true
+	test -f $(MAIN_EXECUTABLE) && rm $(MAIN_EXECUTABLE) || true
 	test -d $(BINDIR) && rmdir $(BINDIR) || true
 	test -d $(OUTDIR) && rmdir $(OUTDIR) || true
 
@@ -241,8 +243,8 @@ distclean:
 	rm -rf out
 
 .PHONY: run
-run:
-	$(BINDIR)/$(PROJECT)
+run: $(MAIN_EXECUTABLE)
+	$(MAIN_EXECUTABLE)
 
 .PHONY: targets
 """)
