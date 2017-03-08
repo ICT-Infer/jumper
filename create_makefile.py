@@ -188,6 +188,10 @@ for file in os.listdir('src'):
 cfiles.sort()
 hfiles.sort()
 
+if debug:
+
+    sys.stderr.write('\n{}\n{}\n'.format(str(cfiles), str(hfiles)))
+
 for fref in cfiles + hfiles:
 
     fref.refresh_directly_associated()
