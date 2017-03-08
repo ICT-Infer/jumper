@@ -179,7 +179,7 @@ CC != sh -c '[ ! -z "$(CC)" ] && echo "$(CC)" || echo "cc"'
 
 INCDIRS = /usr/local/include
 INC != sh -c "echo '$(INCDIRS)' | sed 's@[^ ]\{{1,\}}@-I&@g'"
-CFLAGS = -g -O2 $(INC)
+CFLAGS = $(INC)
 LIBDIRS = /usr/local/lib
 LDFLAGS != sh -c "echo '$(LIBDIRS)' | sed 's@[^ ]\{{1,\}}@-L&@g'"
 LDLIBS = -lSDL2
@@ -189,7 +189,7 @@ HOST_TRIPLET != sh -c '$(CC) -dumpmachine || echo $$(uname -m)-unknown-$$(uname 
 TARGET_TRIPLET != sh -c '[ ! -z "$(TARGET_TRIPLET)" ] && echo "$(TARGET_TRIPLET)" || echo "$(HOST_TRIPLET)"'
 
 BUILDTYPE != sh -c '[ ! -z "$(BUILDTYPE)" ] && echo "$(BUILDTYPE)" || echo "debug"'
-DEBUG != sh -c '[ "$(BUILDTYPE)" = "debug" ] && echo "-DDEBUG" || echo ""'
+DEBUG != sh -c '[ "$(BUILDTYPE)" = "debug" ] && echo "-g -O0 -DDEBUG" || echo "-O2"'
 CFLAGS += $(DEBUG)
 
 CONFIGLVL1 = $(HOST_TRIPLET)
