@@ -55,7 +55,7 @@ The build process has been tested with the following configurations:
   - `CC=clang34 bmake clean` ok
   - `CC=clang34 bmake distclean_triplet` ok
   - `bmake distclean` ok
-* Ports `gmake` (GNU Make) + ports `gcc49` (GCC 4.9.4)
+* Ports `gmake` (GNU Make 4.2.1\_1) + ports `gcc49` (GCC 4.9.4)
   - `MAKE=gmake CC=gcc49 ./build.sh` ok
   - `CC=gcc49 gmake clean` ok
   - `CC=gcc49 gmake distclean_triplet` ok
