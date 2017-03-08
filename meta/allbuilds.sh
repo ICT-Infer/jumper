@@ -49,6 +49,7 @@ host_os=`uname -o`
 
 if [ -f Makefile ] ; then
   ./create_makefile.py Makefile.new || exit 1
+  set +e
   cmp -s Makefile Makefile.new
   if [ "$?" -ne "0" ] ; then
     echo "Makefile updated" 1>&2
@@ -56,6 +57,7 @@ if [ -f Makefile ] ; then
   else
     rm Makefile.new
   fi
+  set -e
 else
   ./create_makefile.py Makefile || exit 1
   echo "Makefile updated" 1>&2
