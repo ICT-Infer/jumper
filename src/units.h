@@ -51,6 +51,8 @@ typedef uint64_t nanometers;
 typedef uint64_t nanoseconds;
 typedef uint64_t nanometers_per_second;
 
+extern const nanometers_per_second SPEED_OF_LIGHT;
+
 // Custom units
 
 /*
