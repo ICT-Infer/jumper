@@ -9,7 +9,7 @@ fi
 
 if [ -f Makefile ] ; then
   ./create_makefile.py Makefile.new || exit 1
-  cmp Makefile Makefile.new
+  cmp -s Makefile Makefile.new
   if [ "$?" -ne "0" ] ; then
     echo "Makefile updated" 1>&2
     mv Makefile.new Makefile
