@@ -93,3 +93,5 @@ if [ "$host_os" = "FreeBSD" ] ; then
   perform_build     pcc fmake
 
 fi
+
+trap - EXIT
