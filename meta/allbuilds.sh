@@ -84,12 +84,12 @@ perform_build cc make
 
 if [ "$host_os" = "FreeBSD" ] ; then
 
+  perform_build clang39  make
+
   perform_build clang34 bmake
 
   perform_build   gcc49 gmake
 
   perform_build     pcc fmake
-
-  perform_build clang39 dmake
 
 fi
