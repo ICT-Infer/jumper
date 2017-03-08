@@ -54,7 +54,13 @@ class FileRef:
 
             if isinstance(fref, Source):
 
-                deps += fref.get_all_deps(cur_depth + 1)
+                subdeps = fref.get_all_deps(cur_depth + 1)
+
+                for subdep in subdeps:
+
+                    if not(subdep in deps):
+
+                        deps.append(subdep)
 
         return deps
 
