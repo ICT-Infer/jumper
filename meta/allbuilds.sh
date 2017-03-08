@@ -47,21 +47,18 @@ trap most_recent_set_of_values EXIT
 
 host_os=`uname -o`
 
-./make.sh distclean
-
-[ -d out ]   && err "Directory \`out' exists after distclean."
-[ -d build ] && err "Directory \`build' exists after distclean."
-
 # cc + make
 
 BUILDTYPE=
 CC=cc
 MAKE=make
+BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh distclean_triplet
 BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh
 
 BUILDTYPE=release
 CC=cc
 MAKE=make
+BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh distclean_triplet
 BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh
 
                   CC=cc MAKE=make ./make.sh
@@ -77,9 +74,11 @@ if [ "$host_os" = "FreeBSD" ] ; then
   BUILDTYPE=
   CC=clang34
   MAKE=bmake
+  BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh distclean_triplet
   BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh
 
   BUILDTYPE=release
+  BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh distclean_triplet
   BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh
 
   # gcc49 + gmake
@@ -87,9 +86,11 @@ if [ "$host_os" = "FreeBSD" ] ; then
   BUILDTYPE=
   CC=gcc49
   MAKE=gmake
+  BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh distclean_triplet
   BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh
 
   BUILDTYPE=release
+  BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh distclean_triplet
   BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh
 
   # pcc + fmake
@@ -97,9 +98,11 @@ if [ "$host_os" = "FreeBSD" ] ; then
   BUILDTYPE=
   CC=pcc
   MAKE=fmake
+  BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh distclean_triplet
   BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh
 
   BUILDTYPE=release
+  BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh distclean_triplet
   BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh
 
   # clang39 + dmake
@@ -107,9 +110,11 @@ if [ "$host_os" = "FreeBSD" ] ; then
   BUILDTYPE=
   CC=clang39
   MAKE=dmake
+  BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh distclean_triplet
   BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh
 
   BUILDTYPE=release
+  BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh distclean_triplet
   BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh
 
 fi
