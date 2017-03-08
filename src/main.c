@@ -56,7 +56,7 @@ int main (int argc, char *argv[])
 		,PLAYER_DEFAULTS.hx
 		,PLAYER_DEFAULTS.hy
 		,PLAYER_DEFAULTS.hz
-		,PLAYER_DEFAULTS.mass * 1e3
+		,PLAYER_DEFAULTS.mass * 1000
 	);
 #endif
 
