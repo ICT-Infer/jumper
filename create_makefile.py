@@ -128,7 +128,7 @@ class Ofile (Buildable):
 
 def invalid_set_of_args ():
 
-    sys.stderr.write('Usage: ' + sys.argv[0] + ' -d | <BSDmakefile>\n')
+    sys.stderr.write('Usage: ' + sys.argv[0] + ' -d | <Makefile>\n')
     sys.exit(1)
 
 if len(sys.argv) != 2:
