@@ -43,9 +43,23 @@ most_recent_set_of_values ()
 
 trap most_recent_set_of_values EXIT
 
-[ -f make.sh ] || err "Could not find file \`make.sh'."
+[ -f create_makefile.py ] || err "Could not find file \`create_makefile.py'."
 
 host_os=`uname -o`
+
+if [ -f Makefile ] ; then
+  ./create_makefile.py Makefile.new || exit 1
+  cmp -s Makefile Makefile.new
+  if [ "$?" -ne "0" ] ; then
+    echo "Makefile updated" 1>&2
+    mv Makefile.new Makefile
+  else
+    rm Makefile.new
+  fi
+else
+  ./create_makefile.py Makefile || exit 1
+  echo "Makefile updated" 1>&2
+fi
 
 perform_build ()
 {
@@ -53,12 +67,12 @@ perform_build ()
   MAKE=$2
 
   BUILDTYPE=
-  CC=$CC MAKE=$MAKE BUILDTYPE=$BUILDTYPE ./make.sh distclean_triplet
-  CC=$CC MAKE=$MAKE BUILDTYPE=$BUILDTYPE ./make.sh
+  CC=$CC BUILDTYPE=$BUILDTYPE $MAKE distclean_triplet
+  CC=$CC BUILDTYPE=$BUILDTYPE $MAKE
 
   BUILDTYPE=release
-  CC=$CC MAKE=$MAKE BUILDTYPE=$BUILDTYPE ./make.sh distclean_triplet
-  CC=$CC MAKE=$MAKE BUILDTYPE=$BUILDTYPE ./make.sh
+  CC=$CC BUILDTYPE=$BUILDTYPE $MAKE distclean_triplet
+  CC=$CC BUILDTYPE=$BUILDTYPE $MAKE
 }
 
 perform_build cc make
