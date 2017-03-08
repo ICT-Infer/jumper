@@ -181,7 +181,7 @@ LIBDIRS = /usr/local/lib
 LDFLAGS != sh -c "echo '$(LIBDIRS)' | sed 's@[^ ]\{{1,\}}@-L&@g'"
 LDLIBS = -lSDL2
 
-HOST_TRIPLET != $(CC) -dumpmachine
+HOST_TRIPLET != sh -c '$(CC) -dumpmachine || echo $$(uname -m)-$$(uname -o)-unknown'
 
 OUTDIR = out/$(HOST_TRIPLET)
 BINDIR = $(OUTDIR)/bin
