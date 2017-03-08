@@ -42,7 +42,14 @@ class FileRef:
 
         return self.fname == str(other)
 
-    def get_all_deps (self):
+    def get_all_deps (self, debug = False, cur_depth = 0):
+
+        if debug:
+
+            sys.stderr.write(
+"""
+{}{} -- {}, {}
+""".format(' ' * (2 * cur_depth), self.__repr__(), self.direct_deps, self.directly_associated))
 
         deps = []
 
@@ -52,7 +59,7 @@ class FileRef:
 
             if isinstance(fref, Source):
 
-                deps += fref.get_all_deps()
+                deps += fref.get_all_deps(debug, cur_depth + 1)
 
         return deps
 
@@ -186,7 +193,7 @@ mf_ofile_deps_ddeps_tuples = []
 for ofile in ofiles:
 
     mf_ofile = str(ofile)
-    mf_deps = ' '.join([str(dep) for dep in ofile.get_all_deps()])
+    mf_deps = ' '.join([str(dep) for dep in ofile.get_all_deps(debug)])
     mf_ddeps = ' '.join([str(ddep) for ddep in ofile.direct_deps])
 
     mf_ofile_deps_ddeps_tuples.append((mf_ofile, mf_deps, mf_ddeps))
