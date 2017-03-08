@@ -60,6 +60,9 @@ The build process has been tested with the following configurations:
   - `CC=gcc49 gmake clean` ok
   - `CC=gcc49 gmake distclean_triplet` ok
   - `gmake distclean` ok
+* Ports `dmake` (4.12.20150309) + ports `clang39` (LLVM clang 3.9.1)
+  - `MAKE=dmake CC=clang39 ./build.sh` failed;
+    `dmake` did not like the `Makefile`
 
 ### Fedora 25
 
