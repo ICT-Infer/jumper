@@ -11,8 +11,9 @@ Video game.
   - [Fedora 25](#fedora-25)
 * [Run](#run)
 * [Clean](#clean)
-* [Distclean triplet](#distclean-triplet)
-* [Distclean](#distclean)
+  - [Clean for target platform](#clean-for-target-platform)
+  - [Distclean for target platform](#distclean-for-target-platform)
+  - [Full distclean](#full-distclean)
 
 ## Install dependencies
 
@@ -31,7 +32,7 @@ sudo dnf install gcc make SDL2 SDL2-devel
 ## Build
 
 ```bash
-./build.sh
+./make.sh
 ```
 
 Build script honors the `CC` and `MAKE` environment variables.
@@ -45,71 +46,71 @@ The build process has been tested with the following configurations:
 ### FreeBSD 11.0-RELEASE
 
 * Base `make` + base `cc` (FreeBSD clang 3.8.0).
-  - `./build.sh` ok
-  - `make clean` ok
-  - `make distclean_triplet` ok
-  - `make distclean` ok
+  - `./make.sh` ok
+  - `./make.sh clean` ok
+  - `./make.sh distclean_triplet` ok
+  - `./make.sh distclean` ok
 * Ports `bmake` (portable version of NetBSD make 20161126) +
   ports `clang34` (LLVM clang 3.4.2)
-  - `MAKE=bmake CC=clang34 ./build.sh` ok
-  - `CC=clang34 bmake clean` ok
-  - `CC=clang34 bmake distclean_triplet` ok
-  - `bmake distclean` ok
+  - `MAKE=bmake CC=clang34 ./make.sh` ok
+  - `MAKE=bmake CC=clang34 ./make.sh clean` ok
+  - `MAKE=bmake CC=clang34 ./make.sh distclean_triplet` ok
+  - `MAKE=bmake ./make.sh distclean` ok
 * Ports `gmake` (GNU Make 4.2.1\_1) + ports `gcc49` (GCC 4.9.4)
-  - `MAKE=gmake CC=gcc49 ./build.sh` ok
-  - `CC=gcc49 gmake clean` ok
-  - `CC=gcc49 gmake distclean_triplet` ok
-  - `gmake distclean` ok
+  - `MAKE=gmake CC=gcc49 ./make.sh` ok
+  - `MAKE=gmake CC=gcc49 ./make.sh clean` ok
+  - `MAKE=gmake CC=gcc49 ./make.sh distclean_triplet` ok
+  - `MAKE=gmake ./make.sh distclean` ok
 * Ports `fmake` (Legacy FreeBSD pmake r250982) +
   ports `pcc` (Portable C Compiler 1.1.0)
-  - `MAKE=fmake CC=pcc ./build.sh` ok, but `pcc` does not support dumpmachine.
-  - `CC=pcc fmake clean` ok, but `fmake` mentions "no input files"
-  - `CC=pcc fmake distclean_triplet` ok, but `fmake` mentions "no input files"
-  - `fmake distclean` ok
+  - `MAKE=fmake CC=pcc ./make.sh` ok, but `pcc` does not support dumpmachine.
+  - `MAKE=fmake CC=pcc ./make.sh clean` ok, but
+    `fmake` mentions "no input files"
+  - `MAKE=fmake CC=pcc ./make.sh distclean_triplet` ok, but
+    `fmake` mentions "no input files"
+  - `MAKE=fmake ./make.sh distclean` ok
 * Ports `dmake` (4.12.20150309) + ports `clang39` (LLVM clang 3.9.1)
-  - `MAKE=dmake CC=clang39 ./build.sh` failed;
+  - `MAKE=dmake CC=clang39 ./make.sh` failed;
     `dmake` did not like the `Makefile`
 
 ### Fedora 25
 
 * Packages `make` (GNU Make 4.1) + packages `gcc` (GCC 6.3.1)
-  - `./build.sh` ok
-  - `make clean` ok
-  - `make distclean_triplet` ok
-  - `make distclean` ok
+  - `./make.sh` ok
+  - `./make.sh clean` ok
+  - `./make.sh distclean_triplet` ok
+  - `./make.sh distclean` ok
 
 ## Run
 
 If you defined the `CC` or `MAKE` environment variables
-during the build stage, adapt accordingly.
+during the build stage, ensure that the same values are
+provided still.
 
 ```bash
-./out/$( cc -dumpmachine )/bin/jumper
+./make.sh run
 ```
 
 ## Clean
 
-Clean for current host platform. If you defined the `CC` or `MAKE`
-environment variables during the build stage, adapt accordingly.
+If you defined the `CC` or `MAKE` environment variables
+during the build stage, ensure that the same values are
+provided still.
+
+### Clean for target platform
 
 ```bash
-make clean
+./make.sh clean
 ```
 
-## Distclean triplet
-
-Distclean for current host platform. If you defined the `CC` or `MAKE`
-environment variables during the build stage, adapt accordingly.
+### Distclean for target platform
 
 ```bash
-make distclean_triplet
+./make.sh distclean_triplet
 ```
 
-## Distclean
-
-Full distclean. Should work regardless of which version of make
-and which version of 
+### Full distclean
 
 ```bash
-make distclean
+./make.sh distclean
 ```

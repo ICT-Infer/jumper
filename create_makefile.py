@@ -174,6 +174,9 @@ makefile.write(
 """
 PROJECT = {}
 
+MAKE != sh -c '[ ! -z "$(MAKE)" ] && echo "$(MAKE)" || echo "make"'
+CC != sh -c '[ ! -z "$(CC)" ] && echo "$(CC)" || echo "cc"'
+
 INCDIRS = /usr/local/include
 INC != sh -c "echo '$(INCDIRS)' | sed 's@[^ ]\{{1,\}}@-I&@g'"
 CFLAGS = -g -O2 $(INC)
@@ -181,13 +184,24 @@ LIBDIRS = /usr/local/lib
 LDFLAGS != sh -c "echo '$(LIBDIRS)' | sed 's@[^ ]\{{1,\}}@-L&@g'"
 LDLIBS = -lSDL2
 
-HOST_TRIPLET != sh -c '$(CC) -dumpmachine || echo $$(uname -m)-$$(uname -o)-unknown'
+HOST_TRIPLET != sh -c '$(CC) -dumpmachine || echo $$(uname -m)-unknown-$$(uname -s)'
 
-OUTDIR = out/$(HOST_TRIPLET)
+TARGET_TRIPLET != sh -c '[ ! -z "$(TARGET_TRIPLET)" ] && echo "$(TARGET_TRIPLET)" || echo "$(HOST_TRIPLET)"'
+
+BUILDTYPE != sh -c '[ ! -z "$(BUILDTYPE)" ] && echo "$(BUILDTYPE)" || echo "release"'
+
+CONFIGLVL1 = $(HOST_TRIPLET)
+CONFIGLVL2 = $(CONFIGLVL1)/$(MAKE)+$(CC)
+CONFIGLVL3 = $(CONFIGLVL2)/$(BUILDTYPE)
+CONFIGLVL4 = $(CONFIGLVL3)/$(TARGET_TRIPLET)
+CONFIGID = $(CONFIGLVL4)
+
+OUTDIR = out/$(CONFIGID)
 BINDIR = $(OUTDIR)/bin
 
+BUILDS = build
 OBJS = {}
-OBJDIR = build/$(HOST_TRIPLET)
+OBJDIR = $(BUILDS)/$(CONFIGID)
 OBJS != sh -c "echo '$(OBJS)' | sed 's@[^ ]\{{1,\}}@$(OBJDIR)/&@g'"
 
 all: $(BINDIR)/$(PROJECT)
@@ -223,8 +237,12 @@ distclean_triplet: clean
 
 .PHONY: distclean
 distclean:
-	rm -rf build
+	rm -rf $(BUILDS)
 	rm -rf out
+
+.PHONY: run
+run:
+	$(BINDIR)/$(PROJECT)
 
 .PHONY: targets
 """)
