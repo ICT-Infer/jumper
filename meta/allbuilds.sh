@@ -28,6 +28,19 @@ BUILDTYPE=
 CC=
 MAKE=
 
+OUT=
+BUILDS=
+
+if [ -f "$HOME/out/.allow_from_any" ] ; then
+  OUT="$HOME/out/github-eriknstr-jumper"
+  echo "Using out dir \`$OUT'." 1>&2
+fi
+
+if [ -f "$HOME/build/.allow_from_any" ] ; then
+  BUILDS="$HOME/build/github-eriknstr-jumper"
+  echo "Using build dir \`$OUT'." 1>&2
+fi
+
 most_recent_set_of_values ()
 {
   echo 1>&2
@@ -69,12 +82,12 @@ perform_build ()
   MAKE=$2
 
   BUILDTYPE=
-  CC=$CC BUILDTYPE=$BUILDTYPE $MAKE distclean_triplet
-  CC=$CC BUILDTYPE=$BUILDTYPE $MAKE
+  CC=$CC BUILDTYPE=$BUILDTYPE OUT="$OUT" BUILDS="$BUILDS" $MAKE distclean_triplet
+  CC=$CC BUILDTYPE=$BUILDTYPE OUT="$OUT" BUILDS="$BUILDS" $MAKE
 
   BUILDTYPE=release
-  CC=$CC BUILDTYPE=$BUILDTYPE $MAKE distclean_triplet
-  CC=$CC BUILDTYPE=$BUILDTYPE $MAKE
+  CC=$CC BUILDTYPE=$BUILDTYPE OUT="$OUT" BUILDS="$BUILDS" $MAKE distclean_triplet
+  CC=$CC BUILDTYPE=$BUILDTYPE OUT="$OUT" BUILDS="$BUILDS" $MAKE
 }
 
 perform_build cc make

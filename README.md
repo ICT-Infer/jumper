@@ -35,6 +35,24 @@ Build script honors the `CC` and `MAKE` environment variables.
 If no value has been provided for these, they will default to
 `cc` and `make` respectively.
 
+If you would like to put build files and out files under
+`$HOME/build` and `$HOME/out` respectively, you may do the
+following:
+
+```bash
+mkdir -p $HOME/build
+touch $HOME/build/.allow_from_any
+mkdir -p $HOME/out
+touch $HOME/out/.allow_from_any
+```
+
+This is useful for example if you want to synchronize projects
+across machines without synchronizing the build files and out files.
+
+Another thing it's useful for is that having one common pair of
+build and out file directories allows you to mount a RAM disk
+for all of these writes should you desire to do so.
+
 ### Debug-build
 
 ```bash

@@ -244,10 +244,11 @@ CONFIGLVL3 = $(CONFIGLVL2)/$(BUILDTYPE)
 CONFIGLVL4 = $(CONFIGLVL3)/$(TARGET_TRIPLET)
 CONFIGID = $(CONFIGLVL4)
 
-OUTDIR = out/$(CONFIGID)
+OUT != sh -c '[ ! -z "$(OUT)" ] && echo "$(OUT)" || echo "out"'
+OUTDIR = $(OUT)/$(CONFIGID)
 BINDIR = $(OUTDIR)/bin
 
-BUILDS = build
+BUILDS != sh -c '[ ! -z "$(BUILDS)" ] && echo "$(BUILDS)" || echo "build"'
 OBJS = {}
 OBJDIR = $(BUILDS)/$(CONFIGID)
 OBJS != sh -c "echo '$(OBJS)' | sed 's@[^ ]\{{1,\}}@$(OBJDIR)/&@g'"
@@ -286,7 +287,7 @@ distclean_triplet: clean
 .PHONY: distclean
 distclean:
 	rm -rf $(BUILDS)
-	rm -rf out
+	rm -rf $(OUT)
 
 .PHONY: run
 run: $(MAIN_EXECUTABLE)

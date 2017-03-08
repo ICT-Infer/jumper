@@ -33,6 +33,19 @@ if [ ! "$BUILDTYPE" = "debug" ] && [ ! "$BUILDTYPE" = "release" ] ; then
   exit 1
 fi
 
+OUT=
+BUILDS=
+
+if [ -f "$HOME/out/.allow_from_any" ] ; then
+  OUT="$HOME/out/github-eriknstr-jumper"
+  echo "Using out dir \`$OUT'." 1>&2
+fi
+
+if [ -f "$HOME/build/.allow_from_any" ] ; then
+  BUILDS="$HOME/build/github-eriknstr-jumper"
+  echo "Using build dir \`$OUT'." 1>&2
+fi
+
 if [ -f Makefile ] ; then
   ./create_makefile.py Makefile.new || exit 1
   cmp -s Makefile Makefile.new
@@ -47,4 +60,4 @@ else
   echo "Makefile updated" 1>&2
 fi
 
-BUILDTYPE="$BUILDTYPE" CC="$CC" ${MAKE} $@
+BUILDTYPE="$BUILDTYPE" OUT="$OUT" BUILDS="$BUILDS" CC="$CC" ${MAKE} $@
