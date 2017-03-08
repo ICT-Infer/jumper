@@ -1,4 +1,6 @@
 /build/
 /out/
 /Makefile
-/Makefile.new
+*.new
+*.prev
+*.old
