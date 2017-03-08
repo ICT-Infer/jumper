@@ -116,18 +116,37 @@ class Ofile (Buildable):
 
     pass
 
-if len(sys.argv) != 2:
+def invalid_set_of_args ():
 
-    sys.stderr.write('Usage: ' + sys.argv[0] + ' <BSDmakefile>\n')
+    sys.stderr.write('Usage: ' + sys.argv[0] + ' -d | <BSDmakefile>\n')
     sys.exit(1)
 
-project = os.path.basename(os.path.dirname(os.path.realpath(__file__)))
+if len(sys.argv) != 2:
 
-makefile = sys.stdout
+    invalid_set_of_args()
 
-if sys.argv[1] != '-':
+makefile = None
+debug = False
+
+if sys.argv[1] == '-':
+
+    makefile = sys.stdout
+
+elif sys.argv[1][0] != '-':
 
     makefile = open(sys.argv[1], 'w')
+
+else:
+
+    if sys.argv[1] == '-d':
+
+        debug = True
+
+    else:
+
+        invalid_set_of_args()
+
+project = os.path.basename(os.path.dirname(os.path.realpath(__file__)))
 
 cfiles = []
 hfiles = []
@@ -159,6 +178,29 @@ for cfile in cfiles:
         [cfile])
 
     ofiles.append(ofile)
+
+mf_ofiles = ' '.join([str(ofile) for ofile in ofiles])
+
+mf_ofile_deps_ddeps_tuples = []
+
+for ofile in ofiles:
+
+    mf_ofile = str(ofile)
+    mf_deps = ' '.join([str(dep) for dep in ofile.get_all_deps()])
+    mf_ddeps = ' '.join([str(ddep) for ddep in ofile.direct_deps])
+
+    mf_ofile_deps_ddeps_tuples.append((mf_ofile, mf_deps, mf_ddeps))
+
+if debug:
+
+    sys.stderr.write('OBJS = {}\n'.format(mf_ofiles))
+
+    for mf_ofile, mf_deps, mf_ddeps in mf_ofile_deps_ddeps_tuples:
+
+        sys.stderr.write('{}: {}\n'.format(mf_ofile, mf_deps))
+        sys.stderr.write('\t{}\n'.format(mf_ddeps))
+
+    sys.exit(0)
 
 makefile.write('#\n')
 
@@ -209,18 +251,16 @@ OBJS != sh -c "echo '$(OBJS)' | sed 's@[^ ]\{{1,\}}@$(OBJDIR)/&@g'"
 MAIN_EXECUTABLE = $(BINDIR)/$(PROJECT)
 
 all: $(MAIN_EXECUTABLE)
-""".format(project, ' '.join([str(ofile) for ofile in ofiles])))
+""".format(project, mf_ofiles))
 
-for ofile in ofiles:
+for mf_ofile, mf_deps, mf_ddeps in mf_ofile_deps_ddeps_tuples:
 
     makefile.write(
 """
 $(OBJDIR)/{}: {}
 	mkdir -p $(OBJDIR)
 	$(CC) $(CFLAGS) -c {} -o $@
-""".format(str(ofile),
-    ' '.join([str(dep) for dep in ofile.get_all_deps()]),
-    ' '.join([str(ddep) for ddep in ofile.direct_deps])))
+""".format(mf_ofile, mf_deps, mf_ddeps))
 
 makefile.write(
 """
