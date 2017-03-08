@@ -179,7 +179,7 @@ CC != sh -c '[ ! -z "$(CC)" ] && echo "$(CC)" || echo "cc"'
 
 INCDIRS = /usr/local/include
 INC != sh -c "echo '$(INCDIRS)' | sed 's@[^ ]\{{1,\}}@-I&@g'"
-CFLAGS = $(INC)
+CFLAGS = -Wall -Werror $(INC)
 LIBDIRS = /usr/local/lib
 LDFLAGS != sh -c "echo '$(LIBDIRS)' | sed 's@[^ ]\{{1,\}}@-L&@g'"
 LDLIBS = -lSDL2
