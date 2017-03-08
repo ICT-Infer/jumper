@@ -93,6 +93,10 @@ class Source (FileRef):
 
 def c_style_local_include_fnames (self):
 
+    if debug:
+
+        sys.stderr.write(self.__repr__() + '\n')
+
     local_inc_fnames = []
 
     with open(str(self), 'r') as f:
@@ -101,9 +105,19 @@ def c_style_local_include_fnames (self):
 
             if line.startswith('#include "'):
 
-                local_inc_fnames.append(os.path.join('src', line[10:-2]))
+                fname = os.path.join('src', line[10:-2])
+
+                if debug:
+
+                    sys.stderr.write('  ' + fname + '\n')
+
+                local_inc_fnames.append(fname)
 
     local_inc_fnames.sort()
+
+    if debug:
+
+        sys.stderr.write('= ' + str(local_inc_fnames) + '\n')
 
     return local_inc_fnames
 
