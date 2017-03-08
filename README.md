@@ -71,6 +71,9 @@ The build process has been tested with the following configurations:
 
 ## Run
 
+If you defined the `CC` or `MAKE` environment variables
+during the build stage, adapt accordingly.
+
 ```bash
 ./out/$( cc -dumpmachine )/bin/jumper
 ```
