@@ -35,9 +35,9 @@ most_recent_set_of_values ()
   echo "----------------------------------------------- IMPLICIT" 1>&2
   env
   echo "----------------------------------------------- EXPLICIT" 1>&2
-  echo "BUILDTYPE=$BUILDTYPE" 1>&2
   echo "CC=$CC" 1>&2
   echo "MAKE=$MAKE" 1>&2
+  echo "BUILDTYPE=$BUILDTYPE" 1>&2
   echo "" 1>&2
 }
 
@@ -47,74 +47,33 @@ trap most_recent_set_of_values EXIT
 
 host_os=`uname -o`
 
-# cc + make
+perform_build ()
+{
+  CC=$1
+  MAKE=$2
 
-BUILDTYPE=
-CC=cc
-MAKE=make
-BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh distclean_triplet
-BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh
+  BUILDTYPE=
+  CC=$CC MAKE=$MAKE BUILDTYPE=$BUILDTYPE ./make.sh distclean_triplet
+  CC=$CC MAKE=$MAKE BUILDTYPE=$BUILDTYPE ./make.sh
 
-BUILDTYPE=release
-CC=cc
-MAKE=make
-BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh distclean_triplet
-BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh
+  BUILDTYPE=release
+  CC=$CC MAKE=$MAKE BUILDTYPE=$BUILDTYPE ./make.sh distclean_triplet
+  CC=$CC MAKE=$MAKE BUILDTYPE=$BUILDTYPE ./make.sh
+}
 
-                  CC=cc MAKE=make ./make.sh
-BUILDTYPE=release CC=cc MAKE=make ./make.sh
+perform_build cc make
 
 [ -d out ]   || err "Directory \`out' does not exist after build."
 [ -d build ] || err "Directory \`build' does not exist after build."
 
 if [ "$host_os" = "FreeBSD" ] ; then
 
-  # clang34 + bmake
+  perform_build clang34 bmake
 
-  BUILDTYPE=
-  CC=clang34
-  MAKE=bmake
-  BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh distclean_triplet
-  BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh
+  perform_build   gcc49 gmake
 
-  BUILDTYPE=release
-  BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh distclean_triplet
-  BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh
+  perform_build     pcc fmake
 
-  # gcc49 + gmake
-
-  BUILDTYPE=
-  CC=gcc49
-  MAKE=gmake
-  BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh distclean_triplet
-  BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh
-
-  BUILDTYPE=release
-  BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh distclean_triplet
-  BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh
-
-  # pcc + fmake
-
-  BUILDTYPE=
-  CC=pcc
-  MAKE=fmake
-  BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh distclean_triplet
-  BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh
-
-  BUILDTYPE=release
-  BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh distclean_triplet
-  BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh
-
-  # clang39 + dmake
-
-  BUILDTYPE=
-  CC=clang39
-  MAKE=dmake
-  BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh distclean_triplet
-  BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh
-
-  BUILDTYPE=release
-  BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh distclean_triplet
-  BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh
+  perform_build clang39 dmake
 
 fi
