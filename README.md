@@ -49,7 +49,7 @@ The build process has been tested with the following configurations:
   - `make clean` ok
   - `make distclean_triplet` ok
   - `make distclean` ok
-* Ports `bmake` (portable version of NetBSD make) +
+* Ports `bmake` (portable version of NetBSD make 20161126) +
   ports `clang34` (LLVM clang 3.4.2)
   - `MAKE=bmake CC=clang34 ./build.sh` ok
   - `CC=clang34 bmake clean` ok
