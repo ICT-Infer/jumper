@@ -45,17 +45,17 @@ int main (int argc, char *argv[])
 		"Velocity x: %lu * 1e-9 m/s\n"
 		"Velocity y: %lu * 1e-9 m/s\n"
 		"Velocity z: %lu * 1e-9 m/s\n"
-		"Heading x:  %lu * 1e-9 m\n"
-		"Heading y:  %lu * 1e-9 m\n"
-		"Heading z:  %lu * 1e-9 m\n"
+		"Pointing x:  %lu * 1e-9 m\n"
+		"Pointing y:  %lu * 1e-9 m\n"
+		"Pointing z:  %lu * 1e-9 m\n"
 		"Mass:       %lu * 1e-9 kg\n"
 		,SPEED_OF_LIGHT
 		,PLAYER_DEFAULTS.vx
 		,PLAYER_DEFAULTS.vy
 		,PLAYER_DEFAULTS.vz
-		,PLAYER_DEFAULTS.hx
-		,PLAYER_DEFAULTS.hy
-		,PLAYER_DEFAULTS.hz
+		,PLAYER_DEFAULTS.px
+		,PLAYER_DEFAULTS.py
+		,PLAYER_DEFAULTS.pz
 		,PLAYER_DEFAULTS.mass * 1000
 	);
 #endif

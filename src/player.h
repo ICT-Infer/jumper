@@ -38,10 +38,10 @@ typedef struct _player
 	nanometers_per_second vy;
 	nanometers_per_second vz;
 
-	// Heading
-	nanometers hx;
-	nanometers hy;
-	nanometers hz;
+	// Pointing
+	nanometers px;
+	nanometers py;
+	nanometers pz;
 
 	micrograms mass;
 
