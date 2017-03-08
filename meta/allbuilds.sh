@@ -80,8 +80,6 @@ if [ "$host_os" = "FreeBSD" ] ; then
   BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh
 
   BUILDTYPE=release
-  CC=clang34
-  MAKE=bmake
   BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh
 
   # gcc49 + gmake
@@ -92,8 +90,6 @@ if [ "$host_os" = "FreeBSD" ] ; then
   BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh
 
   BUILDTYPE=release
-  CC=gcc49
-  MAKE=gmake
   BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh
 
   # pcc + fmake
@@ -104,8 +100,6 @@ if [ "$host_os" = "FreeBSD" ] ; then
   BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh
 
   BUILDTYPE=release
-  CC=pcc
-  MAKE=fmake
   BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh
 
   # clang39 + dmake
@@ -116,8 +110,6 @@ if [ "$host_os" = "FreeBSD" ] ; then
   BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh
 
   BUILDTYPE=release
-  CC=clang39
-  MAKE=dmake
   BUILDTYPE=$BUILDTYPE CC=$CC MAKE=$MAKE ./make.sh
 
 fi
