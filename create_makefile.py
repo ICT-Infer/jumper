@@ -18,12 +18,13 @@
 
 import sys, os
 
+debug = False
+
 class FileRef:
 
-    def __init__ (self, fname, debug = False, direct_deps = [], directly_associated = []):
+    def __init__ (self, fname, direct_deps = [], directly_associated = []):
 
         self.fname = fname
-        self.debug = debug
         self.direct_deps = direct_deps
         self.directly_associated = directly_associated
 
@@ -45,7 +46,7 @@ class FileRef:
 
     def get_all_deps (self, cur_depth = 0):
 
-        if self.debug:
+        if debug:
 
             sys.stderr.write(
 """
@@ -66,9 +67,9 @@ class FileRef:
 
 class Source (FileRef):
 
-    def __init__ (self, fname, debug = False, search_assoc = None):
+    def __init__ (self, fname, search_assoc = None):
 
-        super(Source, self).__init__(fname, debug)
+        super(Source, self).__init__(fname)
 
         self.search_assoc = search_assoc
 
@@ -116,9 +117,9 @@ class Hfile (Source):
 
 class Buildable (FileRef):
 
-    def __init__ (self, fname, debug = False, direct_deps = []):
+    def __init__ (self, fname, direct_deps = []):
 
-        super(Buildable, self).__init__(fname, debug, direct_deps)
+        super(Buildable, self).__init__(fname, direct_deps)
 
 class Ofile (Buildable):
 
@@ -134,7 +135,6 @@ if len(sys.argv) != 2:
     invalid_set_of_args()
 
 makefile = None
-debug = False
 
 if sys.argv[1] == '-':
 
@@ -165,11 +165,11 @@ for file in os.listdir('src'):
 
     if file.endswith('.c'):
 
-        cfiles.append(Cfile(f, debug, hfiles))
+        cfiles.append(Cfile(f, hfiles))
 
     elif file.endswith('.h'):
 
-        hfiles.append(Hfile(f, debug, hfiles))
+        hfiles.append(Hfile(f, hfiles))
 
 cfiles.sort()
 hfiles.sort()
@@ -183,7 +183,7 @@ ofiles = []
 for cfile in cfiles:
 
     ofile = Ofile(os.path.splitext(os.path.basename(str(cfile)))[0] + '.o',
-        debug, [cfile])
+        [cfile])
 
     ofiles.append(ofile)
 
