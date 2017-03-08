@@ -14,4 +14,9 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+#ifndef _JUMPER_SIMULATION_H
+#define _JUMPER_SIMULATION_H
+
 #include "units.h"
+
+#endif

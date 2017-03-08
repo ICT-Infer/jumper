@@ -14,6 +14,9 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+#ifndef _JUMPER_PLAYER_H
+#define _JUMPER_PLAYER_H
+
 #include "units.h"
 
 typedef enum _actions_performable
@@ -52,3 +55,5 @@ typedef struct _player
 } player;
 
 extern const player PLAYER_DEFAULTS;
+
+#endif

@@ -14,6 +14,9 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+#ifndef _JUMPER_UNITS_H
+#define _JUMPER_UNITS_H
+
 #include <stdint.h>
 
 /*
@@ -92,3 +95,5 @@ typedef uint16_t gfx_frames_mini;
 typedef uint16_t sim_ticks_mini;
 typedef uint32_t gfx_frames_extended;
 typedef uint32_t sim_ticks_extended;
+
+#endif
