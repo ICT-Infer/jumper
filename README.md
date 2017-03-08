@@ -40,10 +40,8 @@ If you would like to put build files and out files under
 following:
 
 ```bash
-mkdir -p $HOME/build
-touch $HOME/build/.allow_from_any
-mkdir -p $HOME/out
-touch $HOME/out/.allow_from_any
+mkdir -p $HOME/build && touch $HOME/build/.allow_from_any
+mkdir -p $HOME/out && touch $HOME/out/.allow_from_any
 ```
 
 This is useful for example if you want to synchronize projects
