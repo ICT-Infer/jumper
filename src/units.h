@@ -96,4 +96,27 @@ typedef uint16_t sim_ticks_mini;
 typedef uint32_t gfx_frames_extended;
 typedef uint32_t sim_ticks_extended;
 
+// 3d
+
+typedef struct _position3d
+{
+	nanometers x;
+	nanometers y;
+	nanometers z;
+} position3d;
+
+typedef struct _velocity3d
+{
+	nanometers_per_second x;
+	nanometers_per_second y;
+	nanometers_per_second z;
+} velocity3d;
+
+typedef struct _axes3d
+{
+	position3d xaxis;
+	position3d yaxis;
+	position3d zaxis;
+} axes3d;
+
 #endif

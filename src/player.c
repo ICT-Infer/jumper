@@ -16,4 +16,16 @@
 
 #include "player.h"
 
-const player PLAYER_DEFAULTS = {0, 0, 0, 1 * 1e9, 0, 0, 80 * 1e6, {0, 0, 0}};
+const player PLAYER_DEFAULTS =
+{
+	/*            pos */ {       0,       0,        0 },
+	/*            vel */ {       0,       0,        0 },
+	/*            lco */
+	{
+		/*  xaxis */ { 1 * 1e9,       0,        0 },
+		/*  yaxis */ {       0, 1 * 1e9,        0 },
+		/*  zaxis */ {       0,       0,  1 * 1e9 }
+	},
+	/*           mass */                     80 * 1e6  ,
+	/* actions_active */ { AC_NONE, AC_NONE,  AC_NONE },
+};

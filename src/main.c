@@ -38,25 +38,49 @@ int main (int argc, char *argv[])
 	fprintf
 	(
 		stderr,
+
 		"Speed of light: c = %lu * 1e-9 m/s\n"
 		"\n"
+
 		"Player defaults\n"
+		"===============\n"
+		"Position x:                        %lu  [1e-9   m]\n"
+		"Position y:                        %lu  [1e-9   m]\n"
+		"Position z:                        %lu  [1e-9   m]\n"
 		"---------------\n"
-		"Velocity x: %lu * 1e-9 m/s\n"
-		"Velocity y: %lu * 1e-9 m/s\n"
-		"Velocity z: %lu * 1e-9 m/s\n"
-		"Pointing x:  %lu * 1e-9 m\n"
-		"Pointing y:  %lu * 1e-9 m\n"
-		"Pointing z:  %lu * 1e-9 m\n"
-		"Mass:       %lu * 1e-9 kg\n"
+		"Velocity x:                        %lu  [1e-9 m/s]\n"
+		"Velocity y:                        %lu  [1e-9 m/s]\n"
+		"Velocity z:                        %lu  [1e-9 m/s]\n"
+		"---------------\n"
+		"Orientation xaxis: (%lu, %lu, %lu) [1e-9   m] x 3\n"
+		"Orientation yaxis: (%lu, %lu, %lu) [1e-9   m] x 3\n"
+		"Orientation zaxis: (%lu, %lu, %lu) [1e-9   m] x 3\n"
+		"---------------\n"
+		"Mass:                    %lu  [1e-9 kg]\n"
+		"---------------\n"
+		"Actions active:               (%u %u %u)\n"
+
 		,SPEED_OF_LIGHT
-		,PLAYER_DEFAULTS.vx
-		,PLAYER_DEFAULTS.vy
-		,PLAYER_DEFAULTS.vz
-		,PLAYER_DEFAULTS.px
-		,PLAYER_DEFAULTS.py
-		,PLAYER_DEFAULTS.pz
+
+		,PLAYER_DEFAULTS.pos.x
+		,PLAYER_DEFAULTS.pos.y
+		,PLAYER_DEFAULTS.pos.z
+		,PLAYER_DEFAULTS.vel.x
+		,PLAYER_DEFAULTS.vel.y
+		,PLAYER_DEFAULTS.vel.z
+		,PLAYER_DEFAULTS.lco.xaxis.x
+		,PLAYER_DEFAULTS.lco.xaxis.y
+		,PLAYER_DEFAULTS.lco.xaxis.z
+		,PLAYER_DEFAULTS.lco.yaxis.x
+		,PLAYER_DEFAULTS.lco.yaxis.y
+		,PLAYER_DEFAULTS.lco.yaxis.z
+		,PLAYER_DEFAULTS.lco.zaxis.x
+		,PLAYER_DEFAULTS.lco.zaxis.y
+		,PLAYER_DEFAULTS.lco.zaxis.z
 		,PLAYER_DEFAULTS.mass * 1000
+		,PLAYER_DEFAULTS.actions_active[0]
+		,PLAYER_DEFAULTS.actions_active[1]
+		,PLAYER_DEFAULTS.actions_active[2]
 	);
 #endif
 

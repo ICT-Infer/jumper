@@ -21,27 +21,26 @@
 
 typedef enum _actions_performable
 {
-	NONE = 0,
+	AC_NONE = 0,
 
-	WALK_POSITIVE,
-	WALK_NEGATIVE,
-	RUN_POSITIVE,
-	RUN_NEGATIVE,
+	AC_WALK_POSITIVE,
+	AC_WALK_NEGATIVE,
+	AC_RUN_POSITIVE,
+	AC_RUN_NEGATIVE,
 
-	JUMP
+	AC_JUMP
 } actions_performable;
 
 typedef struct _player
 {
-	// Velocity
-	nanometers_per_second vx;
-	nanometers_per_second vy;
-	nanometers_per_second vz;
+	// Position in parent coordinate system
+	position3d pos;
 
-	// Pointing
-	nanometers px;
-	nanometers py;
-	nanometers pz;
+	// Velocity per second in parent coordinate system
+	velocity3d vel;
+
+	// Local coordinate-system orientation in parent coordinate system
+	axes3d lco;
 
 	micrograms mass;
 
