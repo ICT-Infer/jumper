@@ -43,7 +43,7 @@ fi
 
 if [ -f "$HOME/build/.allow_from_any" ] ; then
   BUILDS="$HOME/build/github-eriknstr-jumper"
-  echo "Using build dir \`$OUT'." 1>&2
+  echo "Using build dir \`$BUILDS'." 1>&2
 fi
 
 if [ -f buildrecipe ] ; then
