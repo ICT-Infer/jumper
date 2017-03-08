@@ -34,11 +34,15 @@ BUILDS=
 if [ -f "$HOME/out/.allow_from_any" ] ; then
   OUT="$HOME/out/github-eriknstr-jumper"
   echo "Using out dir \`$OUT'." 1>&2
+else
+  OUT=out
 fi
 
 if [ -f "$HOME/build/.allow_from_any" ] ; then
   BUILDS="$HOME/build/github-eriknstr-jumper"
   echo "Using build dir \`$OUT'." 1>&2
+else
+  BUILDS=build
 fi
 
 most_recent_set_of_values ()
@@ -92,8 +96,8 @@ perform_build ()
 
 perform_build cc make
 
-[ -d out ]   || err "Directory \`out' does not exist after build."
-[ -d build ] || err "Directory \`build' does not exist after build."
+[ -d "$OUT" ]   || err "Directory \`$OUT' does not exist after build."
+[ -d "$BUILDS" ] || err "Directory \`$BUILDS' does not exist after build."
 
 if [ "$host_os" = "FreeBSD" ] ; then
 
