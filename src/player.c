@@ -16,4 +16,4 @@
 
 #include "player.h"
 
-const player PLAYER_DEFAULTS = {0, 0, 0, 1 * 1e9, 0, 0, 80 * 1e6, 0};
+const player PLAYER_DEFAULTS = {0, 0, 0, 1 * 1e9, 0, 0, 80 * 1e6, {0, 0, 0}};

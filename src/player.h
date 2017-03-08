@@ -18,6 +18,8 @@
 
 typedef enum _actions_performable
 {
+	NONE = 0,
+
 	WALK_POSITIVE,
 	WALK_NEGATIVE,
 	RUN_POSITIVE,
