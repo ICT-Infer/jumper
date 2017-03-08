@@ -1,3 +1,79 @@
 # jumper
 
 Video game.
+
+## Table of Contents
+
+* [Build](#build)
+* [Build platforms tested](#build-platforms-tested)
+  - [FreeBSD 11.0-RELEASE](#freebsd-110-release)
+* [Run](#run)
+* [Clean](#clean)
+* [Distclean triplet](#distclean-triplet)
+* [Distclean](#distclean)
+
+## Build
+
+```bash
+./build.sh
+```
+
+Build script honors the `CC` and `MAKE` environment variables.
+If no value has been provided for these, they will default to
+`cc` and `make` respectively.
+
+## Build platforms tested
+
+The build process has been tested with the following configurations:
+
+### FreeBSD 11.0-RELEASE
+
+* Base `make` + base `cc` (FreeBSD clang 3.8.0).
+  - `./build.sh` ok
+  - `make clean` ok
+  - `make distclean_triplet` ok
+  - `make distclean` ok
+* Ports `bmake` (portable version of NetBSD make) +
+  ports `clang34` (LLVM clang 3.4.2)
+  - `MAKE=bmake CC=clang34 ./build.sh` ok
+  - `CC=clang34 bmake clean` ok
+  - `CC=clang34 bmake distclean_triplet` ok
+  - `bmake distclean` ok
+* Ports `gmake` (GNU Make) + ports `gcc49` (GCC 4.9.4)
+  - `MAKE=gmake CC=gcc49 ./build.sh` ok
+  - `CC=gcc49 gmake clean` ok
+  - `CC=gcc49 gmake distclean_triplet` ok
+  - `gmake distclean` ok
+
+## Run
+
+```bash
+./out/$( cc -dumpmachine )/bin/jumper
+```
+
+## Clean
+
+Clean for current host platform. If you defined the `CC` or `MAKE`
+environment variables during the build stage, adapt accordingly.
+
+```bash
+make clean
+```
+
+## Distclean triplet
+
+Distclean for current host platform. If you defined the `CC` or `MAKE`
+environment variables during the build stage, adapt accordingly.
+
+```bash
+make distclean_triplet
+```
+
+## Distclean
+
+Full distclean. Should work regardless of which version of make
+and which version of 
+
+```bash
+make distclean
+```
