@@ -20,9 +20,10 @@ import sys, os
 
 class FileRef:
 
-    def __init__ (self, fname, direct_deps = [], directly_associated = []):
+    def __init__ (self, fname, debug = False, direct_deps = [], directly_associated = []):
 
         self.fname = fname
+        self.debug = debug
         self.direct_deps = direct_deps
         self.directly_associated = directly_associated
 
@@ -42,9 +43,9 @@ class FileRef:
 
         return self.fname == str(other)
 
-    def get_all_deps (self, debug = False, cur_depth = 0):
+    def get_all_deps (self, cur_depth = 0):
 
-        if debug:
+        if self.debug:
 
             sys.stderr.write(
 """
@@ -59,15 +60,15 @@ class FileRef:
 
             if isinstance(fref, Source):
 
-                deps += fref.get_all_deps(debug, cur_depth + 1)
+                deps += fref.get_all_deps(cur_depth + 1)
 
         return deps
 
 class Source (FileRef):
 
-    def __init__ (self, fname, search_assoc = None):
+    def __init__ (self, fname, debug = False, search_assoc = None):
 
-        super(Source, self).__init__(fname)
+        super(Source, self).__init__(fname, debug)
 
         self.search_assoc = search_assoc
 
@@ -115,9 +116,9 @@ class Hfile (Source):
 
 class Buildable (FileRef):
 
-    def __init__ (self, fname, direct_deps = []):
+    def __init__ (self, fname, debug = False, direct_deps = []):
 
-        super(Buildable, self).__init__(fname, direct_deps)
+        super(Buildable, self).__init__(fname, debug, direct_deps)
 
 class Ofile (Buildable):
 
@@ -164,11 +165,11 @@ for file in os.listdir('src'):
 
     if file.endswith('.c'):
 
-        cfiles.append(Cfile(f, hfiles))
+        cfiles.append(Cfile(f, debug, hfiles))
 
     elif file.endswith('.h'):
 
-        hfiles.append(Hfile(f, hfiles))
+        hfiles.append(Hfile(f, debug, hfiles))
 
 cfiles.sort()
 hfiles.sort()
@@ -182,7 +183,7 @@ ofiles = []
 for cfile in cfiles:
 
     ofile = Ofile(os.path.splitext(os.path.basename(str(cfile)))[0] + '.o',
-        [cfile])
+        debug, [cfile])
 
     ofiles.append(ofile)
 
@@ -193,7 +194,7 @@ mf_ofile_deps_ddeps_tuples = []
 for ofile in ofiles:
 
     mf_ofile = str(ofile)
-    mf_deps = ' '.join([str(dep) for dep in ofile.get_all_deps(debug)])
+    mf_deps = ' '.join([str(dep) for dep in ofile.get_all_deps()])
     mf_ddeps = ' '.join([str(ddep) for ddep in ofile.direct_deps])
 
     mf_ofile_deps_ddeps_tuples.append((mf_ofile, mf_deps, mf_ddeps))
