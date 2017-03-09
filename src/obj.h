@@ -29,9 +29,9 @@ typedef enum _objtag
 
 typedef union _objval
 {
-	world * const w;
-	player * const p;
-} objval;
+	world w;
+	player p;
+} * objval;
 
 typedef struct _obj
 {
