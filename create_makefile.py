@@ -228,7 +228,7 @@ INC != sh -c "echo '$(INCDIRS)' | sed 's@[^ ]\{{1,\}}@-I&@g'"
 CFLAGS = -Wall -Werror $(INC)
 LIBDIRS = /usr/local/lib
 LDFLAGS != sh -c "echo '$(LIBDIRS)' | sed 's@[^ ]\{{1,\}}@-L&@g'"
-LDLIBS = -lSDL2
+LDLIBS = -lSDL2 -lSDL2_image
 
 HOST_TRIPLET != sh -c '$(CC) -dumpmachine || echo $$(uname -m)-unknown-$$(uname -s)'
 
@@ -255,7 +255,12 @@ OBJS != sh -c "echo '$(OBJS)' | sed 's@[^ ]\{{1,\}}@$(OBJDIR)/&@g'"
 
 MAIN_EXECUTABLE = $(BINDIR)/$(PROJECT)
 
-all: $(MAIN_EXECUTABLE)
+SHAREPDIR = $(OUTDIR)/share
+SHAREDIR = $(SHAREPDIR)/jumper
+DYNASTS = LICENSE img/splash.png
+DYNASTS != sh -c "echo '$(DYNASTS)' | sed 's@[^ ]\{{1,\}}@$(SHAREDIR)/&@g'"
+
+all: $(MAIN_EXECUTABLE) $(DYNASTS)
 """.format(project, mf_ofiles))
 
 for mf_ofile, mf_deps, mf_ddeps in mf_ofile_deps_ddeps_tuples:
@@ -273,6 +278,14 @@ $(MAIN_EXECUTABLE): $(OBJS)
 	mkdir -p $(BINDIR)
 	$(CC) $(LDFLAGS) $> $^ -o $@ $(LDLIBS)
 
+$(SHAREDIR)/img/splash.png: assetsgen/img/splash.sh
+	mkdir -p $(SHAREDIR)/img
+	./assetsgen/img/splash.sh $@
+
+$(SHAREDIR)/LICENSE: LICENSE
+	mkdir -p $(SHAREDIR)
+	cp $> $^ $@
+
 .PHONY: clean
 clean:
 	for obj in $(OBJS) ; do test -f $$obj && rm $$obj || true ; done
@@ -281,6 +294,12 @@ clean:
 .PHONY: distclean_triplet
 distclean_triplet: clean
 	test -f $(MAIN_EXECUTABLE) && rm $(MAIN_EXECUTABLE) || true
+	for dynast in $(DYNASTS) ; do \
+	  test -f $$dynast && rm $$dynast || true ; \
+	done
+	test -d $(SHAREDIR)/img && rmdir $(SHAREDIR)/img || true
+	test -d $(SHAREDIR) && rmdir $(SHAREDIR) || true
+	test -d $(SHAREPDIR) && rmdir $(SHAREPDIR) || true
 	test -d $(BINDIR) && rmdir $(BINDIR) || true
 	test -d $(OUTDIR) && rmdir $(OUTDIR) || true
 
@@ -291,7 +310,7 @@ distclean:
 
 .PHONY: run
 run: $(MAIN_EXECUTABLE)
-	$(MAIN_EXECUTABLE)
+	cd $(SHAREDIR) && $(MAIN_EXECUTABLE)
 
 .PHONY: targets
 """)

@@ -15,6 +15,8 @@
  */
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_timer.h>
+#include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <unistd.h>
 
@@ -32,11 +34,53 @@ int main (int argc, char *argv[])
 	fprintf(stderr, "This is a DEBUG build.\n\n");
 #endif
 
-	if (SDL_Init(SDL_INIT_VIDEO))
+	if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER))
 	{
 		fprintf(stderr, "Failed to initialize SDL. Error: %s.\n",
 			SDL_GetError());
-		exit(EXIT_FAILURE);
+		exits = EXIT_FAILURE;
+		goto quit_main;
+	}
+
+	SDL_Window * win;
+	if (!(win = SDL_CreateWindow("jumper",
+		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+		640, 480, 0)))
+	{
+		fprintf(stderr, "Failed to create SDL window. Error: %s.\n",
+			SDL_GetError());
+		exits = EXIT_FAILURE;
+		goto cleanup_sdlinit;
+	}
+
+
+	SDL_Renderer * rend;
+	if (!(rend = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED
+		| SDL_RENDERER_PRESENTVSYNC)))
+	{
+		fprintf(stderr, "Failed to create SDL renderer. Error: %s.\n",
+			SDL_GetError());
+		exits = EXIT_FAILURE;
+		goto cleanup_sdlwindow;
+	}
+
+	SDL_Surface * surface;
+	if (!(surface = IMG_Load("img/splash.png")))
+	{
+		fprintf(stderr, "Failed to create SDL surface. Error: %s.\n",
+			SDL_GetError());
+		exits = EXIT_FAILURE;
+		goto cleanup_sdlrenderer;
+	}
+
+	SDL_Texture * tex = SDL_CreateTextureFromSurface(rend, surface);
+	SDL_FreeSurface(surface);
+	if (!tex)
+	{
+		fprintf(stderr, "Failed to create SDL texture. Error: %s.\n",
+			SDL_GetError());
+		exits = EXIT_FAILURE;
+		goto cleanup_sdlrenderer;
 	}
 
 	const char levelname[] = "Level 1";
@@ -45,8 +89,13 @@ int main (int argc, char *argv[])
 	if ((ops = loadmesh3d(&levelmesh, "meshes/level1")))
 	{
 		fprintf(stderr, "Failed to load mesh.\n");
-		goto fail_main;
+		exits = EXIT_FAILURE;
+		goto cleanup_sdlrenderer;
 	}
+
+	SDL_RenderClear(rend);
+	SDL_RenderCopy(rend, tex, NULL, NULL);
+	SDL_RenderPresent(rend);
 
 	world level;
 	init_world(&level, W_MINI);
@@ -57,6 +106,7 @@ int main (int argc, char *argv[])
 
 #ifdef DEBUG
 	tabulate_properties(stderr, &levelobj);
+	//fprintf(stderr, "\n");
 	//tabulate_properties(stderr, &player1obj);
 
 /*
@@ -110,14 +160,24 @@ int main (int argc, char *argv[])
 */
 #endif
 
-	goto normal_exit_main;
+	while (1)
+	{
+		// TODO: goto cleanup_sdlwindow;
+	}
 
-fail_main:
-	exits = EXIT_FAILURE;
+cleanup_sdlrenderer:
 
-normal_exit_main:
+	SDL_DestroyRenderer(rend);
+
+cleanup_sdlwindow:
+
+	SDL_DestroyWindow(win);
+
+cleanup_sdlinit:
 
 	SDL_Quit();
+
+quit_main:
 
 	return exits;
 }
