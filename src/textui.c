@@ -14,13 +14,31 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+#include <string.h>
+
 #include "textui.h"
+
+const char EQUALITY[] = "========================================"
+                        "========================================";
+
+const char DASHIE[] =   "----------------------------------------"
+                        "----------------------------------------";
 
 int tabulate_properties (FILE * f, obj * o)
 {
 	int ret = 0;
 
-	if ((ret = fprintf(f, "%s\n", o->name))) { goto fail; }
+	if ((ret = fprintf(f, "%s\n", o->name))
+		!= strlen(o->name) + sizeof(char))
+	{
+		goto fail;
+	}
+
+	if ((ret = fprintf(f, "%s\n", &EQUALITY[strlen(EQUALITY)
+		- strlen(o->name)])) != strlen(o->name) + sizeof(char))
+	{
+		goto fail;
+	}
 
 fail:
 	return ret;
