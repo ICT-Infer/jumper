@@ -34,7 +34,9 @@ int main (int argc, char *argv[])
 	int exits = EXIT_SUCCESS;
 	int ops = 0;
 
-	int w, h;
+	int fw, fh, fx, fy; // fullscreen
+	int bt = 0, bl = 0, bb = 0, br = 0; // borders
+	int w, h, x, y; // window
 
 #ifdef DEBUG
 	fprintf(stderr, "This is a DEBUG build.\n\n");
@@ -52,7 +54,7 @@ int main (int argc, char *argv[])
 	if (!(win = SDL_CreateWindow("jumper",
 		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
 		WINDOW_WIDTH, WINDOW_HEIGHT,
-		SDL_WINDOW_FULLSCREEN_DESKTOP | SDL_WINDOW_HIDDEN)))
+		SDL_WINDOW_FULLSCREEN_DESKTOP /*| SDL_WINDOW_HIDDEN*/)))
 	{
 		fprintf(stderr, "Failed to create SDL window. Error: %s.\n",
 			SDL_GetError());
@@ -60,10 +62,46 @@ int main (int argc, char *argv[])
 		goto cleanup_sdlinit;
 	}
 
-	SDL_GetWindowSize(win, &w, &h);
+	SDL_GetWindowSize(win, &fw, &fh);
+	SDL_GetWindowPosition(win, &fx, &fy);
 
 #ifdef DEBUG
-	fprintf(stderr, "Window created. w = %d, h = %d.\n", w, h);
+	fprintf(stderr, "Fullscreen: w = %d, h = %d, x = %d, y = %d.\n",
+		fw, fh, fx, fy);
+#endif
+
+	w = 0.9 * fw;
+	h = 0.9 * fh;
+
+	SDL_SetWindowFullscreen(win, 0);
+	SDL_SetWindowSize(win, w, h);
+
+	if (SDL_GetWindowBordersSize(win, &bt, &bl, &bb, &br))
+	{
+		fprintf(stderr, "WARN: Failed get SDL window size. "
+				"Error: %s.\n", SDL_GetError());
+	}
+
+	if (!bt)
+	{
+		/*
+		 * Assume some reasonable values. Note: User might
+		 * actually just have window decorations turned off.
+		 */
+
+		bt = 24; bl = 5; bb = 5; br = 5;
+	}
+
+	x = fx + 0.05 * (fw - (bl + br));
+	y = fy + 0.05 * (fh - (bt + bb));
+
+	SDL_SetWindowPosition(win, x, y);
+
+#ifdef DEBUG
+	fprintf(stderr, "Window: w = %d, h = %d, "
+			"bt = %d, bl = %d, bb = %d, br = %d, "
+			"x = %d, y = %d.\n",
+		w, h, bt, bl, bb, br, x, y);
 #endif
 
 	SDL_Renderer * rend;
@@ -118,7 +156,7 @@ int main (int argc, char *argv[])
 	splashrect.y = (h - splashrect.h) / 2;
 
 	SDL_SetRenderDrawColor(rend, 255, 255, 255, 255);
-	SDL_ShowWindow(win);
+	//SDL_ShowWindow(win);
 	SDL_RenderClear(rend);
 	SDL_RenderCopy(rend, splashtex, NULL, &splashrect);
 	SDL_RenderPresent(rend);
