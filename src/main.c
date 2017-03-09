@@ -90,7 +90,7 @@ int main (int argc, char *argv[])
 	{
 		fprintf(stderr, "Failed to load mesh.\n");
 		exits = EXIT_FAILURE;
-		goto cleanup_sdlrenderer;
+		goto cleanup_sdltexture;
 	}
 
 	SDL_RenderClear(rend);
@@ -164,6 +164,10 @@ int main (int argc, char *argv[])
 	{
 		// TODO: goto cleanup_sdlwindow;
 	}
+
+cleanup_sdltexture:
+
+	SDL_DestroyTexture(tex);
 
 cleanup_sdlrenderer:
 
