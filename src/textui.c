@@ -31,15 +31,15 @@ int tabulate_properties (FILE * f, obj * o)
 	if ((ret = fprintf(f, "%s\n", o->name))
 		!= strlen(o->name) + sizeof(char))
 	{
-		goto fail;
+		goto fail_tabulate;
 	}
 
 	if ((ret = fprintf(f, "%s\n", &EQUALITY[strlen(EQUALITY)
 		- strlen(o->name)])) != strlen(o->name) + sizeof(char))
 	{
-		goto fail;
+		goto fail_tabulate;
 	}
 
-fail:
+fail_tabulate:
 	return ret;
 }
