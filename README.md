@@ -98,11 +98,11 @@ provided still.
 
 ## Clean
 
+### Clean for target platform
+
 If you defined the `CC` or `MAKE` environment variables
 during the build stage, ensure that the same values are
 provided still.
-
-### Clean for target platform
 
 ```bash
 ./make.sh clean
@@ -110,11 +110,17 @@ provided still.
 
 ### Distclean for target platform
 
+If you defined the `CC` or `MAKE` environment variables
+during the build stage, ensure that the same values are
+provided still.
+
 ```bash
 ./make.sh distclean_triplet
 ```
 
 ### Full distclean
+
+The values of `CC` and `MAKE` should not make a difference here.
 
 ```bash
 ./make.sh distclean
