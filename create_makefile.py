@@ -228,7 +228,7 @@ INC != sh -c "echo '$(INCDIRS)' | sed 's@[^ ]\{{1,\}}@-I&@g'"
 CFLAGS = -Wall -Werror $(INC)
 LIBDIRS = /usr/local/lib
 LDFLAGS != sh -c "echo '$(LIBDIRS)' | sed 's@[^ ]\{{1,\}}@-L&@g'"
-LDLIBS = -lSDL2 -lSDL2_image
+LDLIBS = -lSDL2 -lSDL2_image -lm
 
 HOST_TRIPLET != sh -c '$(CC) -dumpmachine || echo $$(uname -m)-unknown-$$(uname -s)'
 
@@ -309,7 +309,7 @@ distclean:
 	rm -rf $(OUT)
 
 .PHONY: run
-run: $(MAIN_EXECUTABLE)
+run: $(MAIN_EXECUTABLE) $(DYNASTS)
 	cd $(SHAREDIR) && $(MAIN_EXECUTABLE)
 
 .PHONY: targets

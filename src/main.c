@@ -19,16 +19,22 @@
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <math.h>
 
 #include "mesh3d.h"
 #include "obj.h"
 #include "textui.h"
+
+#define WINDOW_WIDTH 640
+#define WINDOW_HEIGHT 480
 
 int main (int argc, char *argv[])
 {
 	// Status
 	int exits = EXIT_SUCCESS;
 	int ops = 0;
+
+	int w, h;
 
 #ifdef DEBUG
 	fprintf(stderr, "This is a DEBUG build.\n\n");
@@ -45,7 +51,8 @@ int main (int argc, char *argv[])
 	SDL_Window * win;
 	if (!(win = SDL_CreateWindow("jumper",
 		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-		640, 480, 0)))
+		WINDOW_WIDTH, WINDOW_HEIGHT,
+		SDL_WINDOW_FULLSCREEN_DESKTOP | SDL_WINDOW_HIDDEN)))
 	{
 		fprintf(stderr, "Failed to create SDL window. Error: %s.\n",
 			SDL_GetError());
@@ -53,6 +60,11 @@ int main (int argc, char *argv[])
 		goto cleanup_sdlinit;
 	}
 
+	SDL_GetWindowSize(win, &w, &h);
+
+#ifdef DEBUG
+	fprintf(stderr, "Window created. w = %d, h = %d.\n", w, h);
+#endif
 
 	SDL_Renderer * rend;
 	if (!(rend = SDL_CreateRenderer(win, -1, SDL_RENDERER_ACCELERATED
@@ -73,15 +85,49 @@ int main (int argc, char *argv[])
 		goto cleanup_sdlrenderer;
 	}
 
-	SDL_Texture * tex = SDL_CreateTextureFromSurface(rend, surface);
+	SDL_Texture * splashtex = SDL_CreateTextureFromSurface(rend, surface);
 	SDL_FreeSurface(surface);
-	if (!tex)
+	if (!splashtex)
 	{
 		fprintf(stderr, "Failed to create SDL texture. Error: %s.\n",
 			SDL_GetError());
 		exits = EXIT_FAILURE;
 		goto cleanup_sdlrenderer;
 	}
+
+	SDL_Rect splashrect;
+
+	{
+		int stw, sth;
+		SDL_QueryTexture(splashtex, NULL, NULL, &stw, &sth);
+		float stratio = ((float) stw) / sth;
+
+		if (stratio > 1)
+		{
+			splashrect.w = 0.75 * w;
+			splashrect.h = splashrect.w / stratio;
+		}
+		else
+		{
+			splashrect.h = 0.75 * h;
+			splashrect.w = stratio * splashrect.h;
+		}
+	}
+
+	splashrect.x = (w - splashrect.w) / 2;
+	splashrect.y = (h - splashrect.h) / 2;
+
+	SDL_SetRenderDrawColor(rend, 255, 255, 255, 255);
+	SDL_ShowWindow(win);
+	SDL_RenderClear(rend);
+	SDL_RenderCopy(rend, splashtex, NULL, &splashrect);
+	SDL_RenderPresent(rend);
+
+#ifdef DEBUG
+	fprintf(stderr, "Window ready.\n");
+#endif
+
+	SDL_Delay(800);
 
 	const char levelname[] = "Level 1";
 
@@ -90,12 +136,9 @@ int main (int argc, char *argv[])
 	{
 		fprintf(stderr, "Failed to load mesh.\n");
 		exits = EXIT_FAILURE;
-		goto cleanup_sdltexture;
+		SDL_DestroyTexture(splashtex);
+		goto cleanup_sdlrenderer;
 	}
-
-	SDL_RenderClear(rend);
-	SDL_RenderCopy(rend, tex, NULL, NULL);
-	SDL_RenderPresent(rend);
 
 	world level;
 	init_world(&level, W_MINI);
@@ -160,14 +203,18 @@ int main (int argc, char *argv[])
 */
 #endif
 
+	SDL_DestroyTexture(splashtex);
+
+#ifdef DEBUG
+	fprintf(stderr, "Splash screen finished.\n");
+#endif
+
+/*
 	while (1)
 	{
 		// TODO: goto cleanup_sdlwindow;
 	}
-
-cleanup_sdltexture:
-
-	SDL_DestroyTexture(tex);
+*/
 
 cleanup_sdlrenderer:
 

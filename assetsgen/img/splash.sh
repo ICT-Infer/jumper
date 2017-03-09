@@ -16,4 +16,4 @@
 # OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 #
 
-echo jumper | convert label:@- $1
+echo jumper | convert -pointsize 960 label:@- $1
