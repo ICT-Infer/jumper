@@ -36,9 +36,9 @@ typedef union _objval
 typedef struct _obj
 {
 	struct _obj * parent;
-	char * name;
+	const char * name;
 	objtag tag;
-	mesh3d mesh;
+	mesh3d * mesh;
 	objval val;
 } obj;
 

@@ -19,5 +19,9 @@
 void def_obj (obj * parent, obj * tgt, const char * name, objtag tag,
 	mesh3d * mesh, objval val)
 {
-	
+	tgt->parent = parent;
+	tgt->name = name;
+	tgt->tag = tag;
+	tgt->mesh = mesh;
+	tgt->val = val;
 }
