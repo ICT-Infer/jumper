@@ -34,7 +34,7 @@ int main (int argc, char *argv[])
 
 	if (SDL_Init(SDL_INIT_VIDEO))
 	{
-		fprintf(stderr, "Failed to initialize SDL. Error: %s\n",
+		fprintf(stderr, "Failed to initialize SDL. Error: %s.\n",
 			SDL_GetError());
 		exit(EXIT_FAILURE);
 	}
@@ -44,6 +44,7 @@ int main (int argc, char *argv[])
 	mesh3d levelmesh;
 	if ((ops = loadmesh3d(&levelmesh, "meshes/level1")))
 	{
+		fprintf(stderr, "Failed to load mesh.\n");
 		goto fail_main;
 	}
 
