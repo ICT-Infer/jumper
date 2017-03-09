@@ -14,37 +14,14 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#ifndef _JUMPER_WORLD_H
-#define _JUMPER_WORLD_H
+#ifndef _MESH3D_H
+#define _MESH3D_H
 
-#include "units.h"
-
-typedef enum _timeframe
+typedef struct _mesh3d
 {
-	W_MINI,
-	W_EXTENDED
-} timeframe;
+	/* TODO */
+} mesh3d;
 
-typedef struct _world
-{
-	// World coordinate-system
-	axes3d wc;
-
-	timeframe tf;
-
-	union
-	{
-		gfx_frames_mini     mgfxf;
-		gfx_frames_extended egfxf;
-	};
-
-	union
-	{
-		sim_ticks_mini     msimt;
-		sim_ticks_extended esimt;
-	};
-} world;
-
-void init_world (world *, timeframe tf);
+int loadmesh3d (mesh3d *, const char *);
 
 #endif

@@ -19,6 +19,10 @@
 
 #include <stdint.h>
 
+#define INV_NANO  1000000000
+#define INV_MICRO    1000000
+#define INV_MILLI       1000
+
 /*
  *  2^8 =                  256
  * 2^16 =                65536
@@ -53,8 +57,6 @@ typedef uint64_t micrograms;
 typedef uint64_t nanometers;
 typedef uint64_t nanoseconds;
 typedef uint64_t nanometers_per_second;
-
-extern const nanometers_per_second SPEED_OF_LIGHT;
 
 // Custom units
 
@@ -118,5 +120,13 @@ typedef struct _axes3d
 	position3d yaxis;
 	position3d zaxis;
 } axes3d;
+
+// CONSTANTS
+
+extern const nanometers_per_second SPEED_OF_LIGHT;
+
+extern const position3d POSITION3D_DEFAULT;
+extern const velocity3d VELOCITY3D_DEFAULT;
+extern const axes3d     AXES3D_DEFAULT;
 
 #endif

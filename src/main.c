@@ -18,11 +18,15 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#include "units.h"
-#include "player.h"
+#include "mesh3d.h"
+#include "obj.h"
 
 int main (int argc, char *argv[])
 {
+	// Status
+	int exits = EXIT_SUCCESS;
+	int ops = 0;
+
 #ifdef DEBUG
 	fprintf(stderr, "This is a DEBUG build.\n\n");
 #endif
@@ -33,6 +37,21 @@ int main (int argc, char *argv[])
 			SDL_GetError());
 		exit(EXIT_FAILURE);
 	}
+
+	const char levelname[] = "Level 1";
+
+	mesh3d levelmesh;
+	if ((ops = loadmesh3d(&levelmesh, "meshes/level1")))
+	{
+		goto fail_main;
+	}
+
+	world level;
+	init_world(&level, W_MINI);
+
+	obj levelobj;
+	def_obj(NULL, &levelobj, levelname, OT_WORLD,
+		&levelmesh, (objval) &level);
 
 #ifdef DEBUG
 	fprintf
@@ -84,7 +103,14 @@ int main (int argc, char *argv[])
 	);
 #endif
 
+	goto normal_exit_main;
+
+fail_main:
+	exits = EXIT_FAILURE;
+
+normal_exit_main:
+
 	SDL_Quit();
 
-	return EXIT_SUCCESS;
+	return exits;
 }

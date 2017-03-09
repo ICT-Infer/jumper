@@ -14,37 +14,34 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#ifndef _JUMPER_WORLD_H
-#define _JUMPER_WORLD_H
+#ifndef _JUMPER_OBJ_H
+#define _JUMPER_OBJ_H
 
-#include "units.h"
+#include "mesh3d.h"
+#include "player.h"
+#include "world.h"
 
-typedef enum _timeframe
+typedef enum _objtag
 {
-	W_MINI,
-	W_EXTENDED
-} timeframe;
+	OT_WORLD,
+	OT_PLAYER
+} objtag;
 
-typedef struct _world
+typedef union _objval
 {
-	// World coordinate-system
-	axes3d wc;
+	world * const w;
+	player * const p;
+} objval;
 
-	timeframe tf;
+typedef struct _obj
+{
+	struct _obj * parent;
+	char * name;
+	objtag tag;
+	mesh3d mesh;
+	objval val;
+} obj;
 
-	union
-	{
-		gfx_frames_mini     mgfxf;
-		gfx_frames_extended egfxf;
-	};
-
-	union
-	{
-		sim_ticks_mini     msimt;
-		sim_ticks_extended esimt;
-	};
-} world;
-
-void init_world (world *, timeframe tf);
+void def_obj (obj *, obj *, const char *, objtag, mesh3d *, objval);
 
 #endif

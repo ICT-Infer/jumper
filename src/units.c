@@ -16,4 +16,13 @@
 
 #include "units.h"
 
-const nanometers_per_second SPEED_OF_LIGHT = 299792458 * 1e9;
+const nanometers_per_second SPEED_OF_LIGHT = ((int64_t) 299792458) * INV_NANO;
+
+const position3d POSITION3D_DEFAULT = { 0, 0, 0 };
+const velocity3d VELOCITY3D_DEFAULT = { 0, 0, 0 };
+const axes3d     AXES3D_DEFAULT =
+{
+	{ INV_NANO,        0,        0 },
+	{        0, INV_NANO,        0 },
+	{        0,        0, INV_NANO }
+};
