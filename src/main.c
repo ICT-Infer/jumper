@@ -54,7 +54,7 @@ int main (int argc, char *argv[])
 	if (!(win = SDL_CreateWindow("jumper",
 		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
 		WINDOW_WIDTH, WINDOW_HEIGHT,
-		SDL_WINDOW_FULLSCREEN_DESKTOP /*| SDL_WINDOW_HIDDEN*/)))
+		SDL_WINDOW_FULLSCREEN_DESKTOP | SDL_WINDOW_HIDDEN)))
 	{
 		fprintf(stderr, "Failed to create SDL window. Error: %s.\n",
 			SDL_GetError());
@@ -156,7 +156,7 @@ int main (int argc, char *argv[])
 	splashrect.y = (h - splashrect.h) / 2;
 
 	SDL_SetRenderDrawColor(rend, 255, 255, 255, 255);
-	//SDL_ShowWindow(win);
+	SDL_ShowWindow(win);
 	SDL_RenderClear(rend);
 	SDL_RenderCopy(rend, splashtex, NULL, &splashrect);
 	SDL_RenderPresent(rend);
