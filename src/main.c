@@ -20,6 +20,7 @@
 
 #include "mesh3d.h"
 #include "obj.h"
+#include "textui.h"
 
 int main (int argc, char *argv[])
 {
@@ -54,6 +55,10 @@ int main (int argc, char *argv[])
 		&levelmesh, (objval) &level);
 
 #ifdef DEBUG
+	tabulate_properties(stderr, &levelobj);
+	//tabulate_properties(stderr, &player1obj);
+
+/*
 	fprintf
 	(
 		stderr,
@@ -101,6 +106,7 @@ int main (int argc, char *argv[])
 		,PLAYER_DEFAULTS.actions_active[1]
 		,PLAYER_DEFAULTS.actions_active[2]
 	);
+*/
 #endif
 
 	goto normal_exit_main;
