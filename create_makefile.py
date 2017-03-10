@@ -221,7 +221,8 @@ for cfile in cfiles:
 
     ofiles.append(ofile)
 
-mf_ofiles = ' '.join([str(ofile) for ofile in ofiles])
+mf_ofiles = ' '.join([os.path.join('$(OBJDIR)',str(ofile))
+    for ofile in ofiles])
 
 gennedfiles = []
 
@@ -279,9 +280,8 @@ OUTDIR = $(OUT)/$(CONFIGID)
 BINDIR = $(OUTDIR)/bin
 
 BUILDS != sh -c '[ ! -z "$(BUILDS)" ] && echo "$(BUILDS)" || echo "build"'
-OBJS = {}
 OBJDIR = $(BUILDS)/$(CONFIGID)
-OBJS != sh -c "echo '$(OBJS)' | sed 's@[^ ]\{{1,\}}@$(OBJDIR)/&@g'"
+OBJS = {}
 
 MAIN_EXECUTABLE = $(BINDIR)/$(PROJECT)
 
