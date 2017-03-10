@@ -278,9 +278,9 @@ $(MAIN_EXECUTABLE): $(OBJS)
 	mkdir -p $(BINDIR)
 	$(CC) $(LDFLAGS) $> $^ -o $@ $(LDLIBS)
 
-$(SHAREDIR)/img/splash.png: assetsgen/img/splash.sh
+$(SHAREDIR)/img/splash.png: assets/gen/img/splash.sh
 	mkdir -p $(SHAREDIR)/img
-	./assetsgen/img/splash.sh $@
+	./assets/gen/img/splash.sh $@
 
 $(SHAREDIR)/LICENSE: LICENSE
 	mkdir -p $(SHAREDIR)
