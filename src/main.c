@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <math.h>
+#include <stdbool.h>
 
 #include "mesh3d.h"
 #include "obj.h"
@@ -247,12 +248,18 @@ int main (int argc, char *argv[])
 	fprintf(stderr, "Splash screen finished.\n");
 #endif
 
-/*
-	while (1)
+	bool quit = false;
+	SDL_Event evt;
+	while (!quit)
 	{
-		// TODO: goto cleanup_sdlwindow;
+		while (SDL_PollEvent(&evt))
+		{
+			if (evt.type == SDL_QUIT)
+			{
+				quit = true;
+			}
+		}
 	}
-*/
 
 cleanup_sdlrenderer:
 
