@@ -124,7 +124,18 @@ class Buildable (FileRef):
 
 class Ofile (Buildable):
 
-    pass
+    def mfstr (self):
+
+        mf_ofile = str(self)
+        mf_deps = ' '.join([str(dep) for dep in self.get_all_deps()])
+        mf_ddeps = ' '.join([str(ddep) for ddep in self.direct_deps])
+
+        return \
+"""
+$(OBJDIR)/{}: {}
+	mkdir -p $(OBJDIR)
+	$(CC) $(CFLAGS) -c {} -o $@
+""".format(mf_ofile, mf_deps, mf_ddeps)
 
 def invalid_set_of_args ():
 
@@ -160,9 +171,10 @@ project = os.path.basename(os.path.dirname(os.path.realpath(__file__)))
 cfiles = []
 hfiles = []
 
-for file in os.listdir('src'):
+dir = 'src'
+for file in os.listdir(dir):
 
-    f = os.path.join('src', file)
+    f = os.path.join(dir, file)
 
     if file.endswith('.c'):
 
@@ -189,16 +201,6 @@ for cfile in cfiles:
     ofiles.append(ofile)
 
 mf_ofiles = ' '.join([str(ofile) for ofile in ofiles])
-
-mf_ofile_deps_ddeps_tuples = []
-
-for ofile in ofiles:
-
-    mf_ofile = str(ofile)
-    mf_deps = ' '.join([str(dep) for dep in ofile.get_all_deps()])
-    mf_ddeps = ' '.join([str(ddep) for ddep in ofile.direct_deps])
-
-    mf_ofile_deps_ddeps_tuples.append((mf_ofile, mf_deps, mf_ddeps))
 
 if debug:
 
@@ -263,14 +265,9 @@ DYNASTS != sh -c "echo '$(DYNASTS)' | sed 's@[^ ]\{{1,\}}@$(SHAREDIR)/&@g'"
 all: $(MAIN_EXECUTABLE) $(DYNASTS)
 """.format(project, mf_ofiles))
 
-for mf_ofile, mf_deps, mf_ddeps in mf_ofile_deps_ddeps_tuples:
+for ofile in ofiles:
 
-    makefile.write(
-"""
-$(OBJDIR)/{}: {}
-	mkdir -p $(OBJDIR)
-	$(CC) $(CFLAGS) -c {} -o $@
-""".format(mf_ofile, mf_deps, mf_ddeps))
+    makefile.write(ofile.mfstr())
 
 makefile.write(
 """
