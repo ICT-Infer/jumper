@@ -29,6 +29,28 @@
 #define WINDOW_WIDTH 640
 #define WINDOW_HEIGHT 480
 
+void seventyfive (SDL_Texture * tex, SDL_Rect * rect, int w, int h)
+{
+	int stw, sth;
+	SDL_QueryTexture(tex, NULL, NULL, &stw, &sth);
+	float stratio = ((float) stw) / sth;
+	float wratio = ((float) w) / h;
+
+	if (wratio < stratio)
+	{
+		rect->w = 0.75 * w;
+		rect->h = rect->w / stratio;
+	}
+	else
+	{
+		rect->h = 0.75 * h;
+		rect->w = stratio * rect->h;
+	}
+
+	rect->x = (w - rect->w) / 2;
+	rect->y = (h - rect->h) / 2;
+}
+
 int main (int argc, char *argv[])
 {
 	// Status
@@ -55,7 +77,9 @@ int main (int argc, char *argv[])
 	if (!(win = SDL_CreateWindow("jumper",
 		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
 		WINDOW_WIDTH, WINDOW_HEIGHT,
-		SDL_WINDOW_FULLSCREEN_DESKTOP | SDL_WINDOW_HIDDEN)))
+		SDL_WINDOW_FULLSCREEN_DESKTOP |
+		SDL_WINDOW_HIDDEN |
+		SDL_WINDOW_RESIZABLE )))
 	{
 		fprintf(stderr, "Failed to create SDL window. Error: %s.\n",
 			SDL_GetError());
@@ -136,25 +160,7 @@ int main (int argc, char *argv[])
 
 	SDL_Rect splashrect;
 
-	{
-		int stw, sth;
-		SDL_QueryTexture(splashtex, NULL, NULL, &stw, &sth);
-		float stratio = ((float) stw) / sth;
-
-		if (stratio > 1)
-		{
-			splashrect.w = 0.75 * w;
-			splashrect.h = splashrect.w / stratio;
-		}
-		else
-		{
-			splashrect.h = 0.75 * h;
-			splashrect.w = stratio * splashrect.h;
-		}
-	}
-
-	splashrect.x = (w - splashrect.w) / 2;
-	splashrect.y = (h - splashrect.h) / 2;
+	seventyfive(splashtex, &splashrect, w, h);
 
 	SDL_SetRenderDrawColor(rend, 255, 255, 255, 255);
 	SDL_ShowWindow(win);
@@ -175,8 +181,7 @@ int main (int argc, char *argv[])
 	{
 		fprintf(stderr, "Failed to load mesh.\n");
 		exits = EXIT_FAILURE;
-		SDL_DestroyTexture(splashtex);
-		goto cleanup_sdlrenderer;
+		goto cleanup_sdlsplash;
 	}
 
 	world level;
@@ -242,10 +247,8 @@ int main (int argc, char *argv[])
 */
 #endif
 
-	SDL_DestroyTexture(splashtex);
-
 #ifdef DEBUG
-	fprintf(stderr, "Splash screen finished.\n");
+	fprintf(stderr, "About to enter main loop.\n");
 #endif
 
 	bool quit = false;
@@ -259,7 +262,20 @@ int main (int argc, char *argv[])
 				quit = true;
 			}
 		}
+
+		SDL_RenderClear(rend);
+
+		SDL_GetWindowSize(win, &w, &h);
+		seventyfive(splashtex, &splashrect, w, h);
+
+		SDL_RenderCopy(rend, splashtex, NULL, &splashrect);
+		SDL_RenderPresent(rend);
 	}
+
+
+cleanup_sdlsplash:
+
+	SDL_DestroyTexture(splashtex);
 
 cleanup_sdlrenderer:
 
