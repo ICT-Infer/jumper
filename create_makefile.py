@@ -137,6 +137,27 @@ $(OBJDIR)/{}: {}
 	$(CC) $(CFLAGS) -c {} -o $@
 """.format(mf_ofile, mf_deps, mf_ddeps)
 
+class Gennedfile (Buildable):
+
+    def __init__ (self, fname, creator):
+
+        super(Gennedfile, self).__init__(fname)
+
+        self.creator = creator
+
+    def mfstr (self):
+
+        return \
+"""
+$(SHAREDIR)/{}: {}
+	mkdir -p $(SHAREDIR)/{}
+	./{} $@
+""".format(str(self), creator, os.path.dirname(str(self)), creator)
+
+def genfile (creator, subpath, stem, tgtext):
+
+    return Gennedfile(os.path.join(subpath, stem + tgtext), creator)
+
 def invalid_set_of_args ():
 
     sys.stderr.write('Usage: ' + sys.argv[0] + ' -d | <Makefile>\n')
@@ -202,6 +223,20 @@ for cfile in cfiles:
 
 mf_ofiles = ' '.join([str(ofile) for ofile in ofiles])
 
+gennedfiles = []
+
+subpath = 'img'
+srcpath = os.path.join('assets', 'gen', subpath)
+for file in os.listdir(srcpath):
+
+    creator = os.path.join(srcpath, file)
+    stem, srcext = os.path.splitext(file)
+    gennedfiles.append(genfile(creator, subpath, stem, '.png'))
+
+gennedfiles.sort()
+
+mf_gennedfiles = ' '.join([str(gennedfile) for gennedfile in gennedfiles])
+
 if debug:
 
     sys.stderr.write('No current debug info to show.\n')
@@ -259,7 +294,7 @@ MAIN_EXECUTABLE = $(BINDIR)/$(PROJECT)
 
 SHAREPDIR = $(OUTDIR)/share
 SHAREDIR = $(SHAREPDIR)/jumper
-DYNASTS = LICENSE img/splash.png
+DYNASTS = LICENSE {}
 DYNASTS != sh -c "echo '$(DYNASTS)' | sed 's@[^ ]\{{1,\}}@$(SHAREDIR)/&@g'"
 
 all: $(MAIN_EXECUTABLE) $(DYNASTS)
@@ -267,15 +302,11 @@ all: $(MAIN_EXECUTABLE) $(DYNASTS)
 $(SHAREDIR)/LICENSE: LICENSE
 	mkdir -p $(SHAREDIR)
 	cp $> $^ $@
+""".format(project, mf_ofiles, mf_gennedfiles))
 
-$(SHAREDIR)/img/splash.png: assets/gen/img/splash.sh
-	mkdir -p $(SHAREDIR)/img
-	./assets/gen/img/splash.sh $@
-""".format(project, mf_ofiles))
+for tgt in gennedfiles + ofiles:
 
-for ofile in ofiles:
-
-    makefile.write(ofile.mfstr())
+    makefile.write(tgt.mfstr())
 
 makefile.write(
 """
