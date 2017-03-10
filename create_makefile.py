@@ -187,6 +187,21 @@ def genfile (creator, subpath, stem, tgtext):
 
     return Gennedfile(os.path.join(subpath, stem + tgtext), creator)
 
+class Copyfile (FileRef):
+
+    def __init__ (self, fname):
+
+        super(Copyfile, self).__init__(fname)
+
+    def mfstr (self):
+
+        return \
+"""
+$(SHAREDIR)/{}: {}
+	mkdir -p $(SHAREDIR)/{}
+	cp {} $@
+""".format(str(self), str(self), os.path.dirname(str(self)), str(self))
+
 project = os.path.basename(os.path.dirname(os.path.realpath(__file__)))
 projprefix = 'github-eriknstr'
 
@@ -237,7 +252,15 @@ for file in os.listdir(srcpath):
 
 gennedfiles.sort()
 
-mf_gennedfiles = ' '.join([str(gennedfile) for gennedfile in gennedfiles])
+mf_gennedfiles = ' '.join([os.path.join('$(SHAREDIR)',str(gennedfile))
+    for gennedfile in gennedfiles])
+
+copyfiles = []
+copyfiles.append(Copyfile('LICENSE'))
+copyfiles.sort()
+
+mf_copyfiles = ' '.join([os.path.join('$(SHAREDIR)',str(copyfile))
+    for copyfile in copyfiles])
 
 if debug:
 
@@ -285,8 +308,7 @@ BINDIR = $(OUT)/$(RELABINDIR)
 
 RELASHAREDIR = $(PROJUID)/no-arch/share/$(PROJECT)
 SHAREDIR = $(OUT)/$(RELASHAREDIR)
-DYNASTS = LICENSE {}
-DYNASTS != sh -c "echo '$(DYNASTS)' | sed 's@[^ ]\{{1,\}}@$(SHAREDIR)/&@g'"
+DYNASTS = {} {}
 
 BUILDS != sh -c '[ ! -z "$(BUILDS)" ] && echo "$(BUILDS)" || echo "build"'
 RELAOBJDIR = $(PROJUID)/$(CONFIGID)
@@ -296,13 +318,9 @@ OBJS = {}
 MAIN_EXECUTABLE = $(BINDIR)/$(PROJECT)
 
 all: $(MAIN_EXECUTABLE) $(DYNASTS)
+""".format(project, projprefix, mf_copyfiles, mf_gennedfiles, mf_ofiles))
 
-$(SHAREDIR)/LICENSE: LICENSE
-	mkdir -p $(SHAREDIR)
-	cp $> $^ $@
-""".format(project, projprefix, mf_gennedfiles, mf_ofiles))
-
-for tgt in gennedfiles + ofiles:
+for tgt in copyfiles + gennedfiles + ofiles:
 
     makefile.write(tgt.mfstr())
 
