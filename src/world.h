@@ -21,8 +21,8 @@
 
 typedef enum _timeframe
 {
-	W_MINI,
-	W_EXTENDED
+	WTF_MINI,
+	WTF_EXTENDED
 } timeframe;
 
 typedef struct _world

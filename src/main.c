@@ -180,7 +180,7 @@ int main (int argc, char *argv[])
 	}
 
 	world level;
-	init_world(&level, W_MINI);
+	init_world(&level, WTF_MINI);
 
 	obj levelobj;
 	def_obj(NULL, &levelobj, levelname, OT_WORLD,

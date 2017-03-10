@@ -20,7 +20,7 @@ void init_world (world * w, timeframe tf)
 {
 	w->wc = AXES3D_DEFAULT;
 
-	if (tf == W_MINI)
+	if (tf == WTF_MINI)
 	{
 		w->mgfxf = 0;
 		w->msimt = 0;
