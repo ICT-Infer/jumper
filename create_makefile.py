@@ -188,6 +188,7 @@ def genfile (creator, subpath, stem, tgtext):
     return Gennedfile(os.path.join(subpath, stem + tgtext), creator)
 
 project = os.path.basename(os.path.dirname(os.path.realpath(__file__)))
+projprefix = 'github-eriknstr'
 
 cfiles = []
 hfiles = []
@@ -257,6 +258,7 @@ makefile.write('#\n')
 makefile.write(
 """
 PROJECT = {}
+PROJUID = {}-$(PROJECT)
 
 MAKE != sh -c '[ ! -z "$(MAKE)" ] && echo "$(MAKE)" || echo "make"'
 CC != sh -c '[ ! -z "$(CC)" ] && echo "$(CC)" || echo "cc"'
@@ -276,26 +278,29 @@ CFLAGS += $(DEBUG)
 CONFIGID = $(HOST_TRIPLET)/$(MAKE)+$(CC)/$(BUILDTYPE)/$(TARGET_TRIPLET)
 
 OUT != sh -c '[ ! -z "$(OUT)" ] && echo "$(OUT)" || echo "out"'
-OUTDIR = $(OUT)/$(CONFIGID)
-BINDIR = $(OUTDIR)/bin
+RELAOUTDIR = $(PROJUID)/$(CONFIGID)
+OUTDIR = $(OUT)/$(RELAOUTDIR)
+RELABINDIR = $(RELAOUTDIR)/bin
+BINDIR = $(OUT)/$(RELABINDIR)
+
+RELASHAREDIR = $(PROJUID)/no-arch/share/$(PROJECT)
+SHAREDIR = $(OUT)/$(RELASHAREDIR)
+DYNASTS = LICENSE {}
+DYNASTS != sh -c "echo '$(DYNASTS)' | sed 's@[^ ]\{{1,\}}@$(SHAREDIR)/&@g'"
 
 BUILDS != sh -c '[ ! -z "$(BUILDS)" ] && echo "$(BUILDS)" || echo "build"'
-OBJDIR = $(BUILDS)/$(CONFIGID)
+RELAOBJDIR = $(PROJUID)/$(CONFIGID)
+OBJDIR = $(BUILDS)/$(RELAOBJDIR)
 OBJS = {}
 
 MAIN_EXECUTABLE = $(BINDIR)/$(PROJECT)
-
-SHAREPDIR = $(OUTDIR)/share
-SHAREDIR = $(SHAREPDIR)/jumper
-DYNASTS = LICENSE {}
-DYNASTS != sh -c "echo '$(DYNASTS)' | sed 's@[^ ]\{{1,\}}@$(SHAREDIR)/&@g'"
 
 all: $(MAIN_EXECUTABLE) $(DYNASTS)
 
 $(SHAREDIR)/LICENSE: LICENSE
 	mkdir -p $(SHAREDIR)
 	cp $> $^ $@
-""".format(project, mf_ofiles, mf_gennedfiles))
+""".format(project, projprefix, mf_gennedfiles, mf_ofiles))
 
 for tgt in gennedfiles + ofiles:
 
@@ -310,24 +315,17 @@ $(MAIN_EXECUTABLE): $(OBJS)
 .PHONY: clean
 clean:
 	for obj in $(OBJS) ; do test -f $$obj && rm $$obj || true ; done
-	test -d $(OBJDIR) && rmdir $(OBJDIR) || true
+	test -d $(OBJDIR) && cd $(BUILDS) && rmdir -p $(RELAOBJDIR) || true
 
 .PHONY: distclean_triplet
 distclean_triplet: clean
 	test -f $(MAIN_EXECUTABLE) && rm $(MAIN_EXECUTABLE) || true
-	for dynast in $(DYNASTS) ; do \
-	  test -f $$dynast && rm $$dynast || true ; \
-	done
-	test -d $(SHAREDIR)/img && rmdir $(SHAREDIR)/img || true
-	test -d $(SHAREDIR) && rmdir $(SHAREDIR) || true
-	test -d $(SHAREPDIR) && rmdir $(SHAREPDIR) || true
-	test -d $(BINDIR) && rmdir $(BINDIR) || true
-	test -d $(OUTDIR) && rmdir $(OUTDIR) || true
+	test -d $(BINDIR) && cd $(OUT) && rmdir -p $(RELABINDIR) || true
 
 .PHONY: distclean
 distclean:
-	rm -rf $(BUILDS)
-	rm -rf $(OUT)
+	test -d $(BUILDS)/$(PROJUID) && cd $(BUILDS) && rm -rf $(PROJUID) || true
+	test -d $(OUT)/$(PROJUID) && cd $(OUT) && rm -rf $(PROJUID) || true
 
 .PHONY: run
 run: $(MAIN_EXECUTABLE) $(DYNASTS)
