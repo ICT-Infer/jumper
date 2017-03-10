@@ -20,6 +20,35 @@ import sys, os
 
 debug = False
 
+def invalid_set_of_args ():
+
+    sys.stderr.write('Usage: ' + sys.argv[0] + ' -d | <Makefile>\n')
+    sys.exit(1)
+
+if len(sys.argv) != 2:
+
+    invalid_set_of_args()
+
+makefile = None
+
+if sys.argv[1] == '-':
+
+    makefile = sys.stdout
+
+elif sys.argv[1][0] != '-':
+
+    makefile = open(sys.argv[1], 'w')
+
+else:
+
+    if sys.argv[1] == '-d':
+
+        debug = True
+
+    else:
+
+        invalid_set_of_args()
+
 class FileRef:
 
     def __init__ (self, fname, direct_deps = [], directly_associated = []):
@@ -157,35 +186,6 @@ $(SHAREDIR)/{}: {}
 def genfile (creator, subpath, stem, tgtext):
 
     return Gennedfile(os.path.join(subpath, stem + tgtext), creator)
-
-def invalid_set_of_args ():
-
-    sys.stderr.write('Usage: ' + sys.argv[0] + ' -d | <Makefile>\n')
-    sys.exit(1)
-
-if len(sys.argv) != 2:
-
-    invalid_set_of_args()
-
-makefile = None
-
-if sys.argv[1] == '-':
-
-    makefile = sys.stdout
-
-elif sys.argv[1][0] != '-':
-
-    makefile = open(sys.argv[1], 'w')
-
-else:
-
-    if sys.argv[1] == '-d':
-
-        debug = True
-
-    else:
-
-        invalid_set_of_args()
 
 project = os.path.basename(os.path.dirname(os.path.realpath(__file__)))
 
