@@ -260,11 +260,8 @@ PROJECT = {}
 MAKE != sh -c '[ ! -z "$(MAKE)" ] && echo "$(MAKE)" || echo "make"'
 CC != sh -c '[ ! -z "$(CC)" ] && echo "$(CC)" || echo "cc"'
 
-INCDIRS = /usr/local/include
-INC != sh -c "echo '$(INCDIRS)' | sed 's@[^ ]\{{1,\}}@-I&@g'"
-CFLAGS = -Wall -Werror $(INC)
-LIBDIRS = /usr/local/lib
-LDFLAGS != sh -c "echo '$(LIBDIRS)' | sed 's@[^ ]\{{1,\}}@-L&@g'"
+CFLAGS = -Wall -Werror -I/usr/local/include
+LDFLAGS = -L/usr/local/lib
 LDLIBS = -lSDL2 -lSDL2_image -lm
 
 HOST_TRIPLET != sh -c '$(CC) -dumpmachine || echo $$(uname -m)-unknown-$$(uname -s)'
