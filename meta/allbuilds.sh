@@ -32,14 +32,14 @@ OUT=
 BUILDS=
 
 if [ -f "$HOME/out/.allow_from_any" ] ; then
-  OUT="$HOME/out/github-eriknstr-jumper"
+  OUT="$HOME/out"
   echo "Using out dir \`$OUT'." 1>&2
 else
   OUT=out
 fi
 
 if [ -f "$HOME/build/.allow_from_any" ] ; then
-  BUILDS="$HOME/build/github-eriknstr-jumper"
+  BUILDS="$HOME/build"
   echo "Using build dir \`$BUILDS'." 1>&2
 else
   BUILDS=build
