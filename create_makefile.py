@@ -263,6 +263,14 @@ DYNASTS = LICENSE img/splash.png
 DYNASTS != sh -c "echo '$(DYNASTS)' | sed 's@[^ ]\{{1,\}}@$(SHAREDIR)/&@g'"
 
 all: $(MAIN_EXECUTABLE) $(DYNASTS)
+
+$(SHAREDIR)/LICENSE: LICENSE
+	mkdir -p $(SHAREDIR)
+	cp $> $^ $@
+
+$(SHAREDIR)/img/splash.png: assets/gen/img/splash.sh
+	mkdir -p $(SHAREDIR)/img
+	./assets/gen/img/splash.sh $@
 """.format(project, mf_ofiles))
 
 for ofile in ofiles:
@@ -274,14 +282,6 @@ makefile.write(
 $(MAIN_EXECUTABLE): $(OBJS)
 	mkdir -p $(BINDIR)
 	$(CC) $(LDFLAGS) $> $^ -o $@ $(LDLIBS)
-
-$(SHAREDIR)/img/splash.png: assets/gen/img/splash.sh
-	mkdir -p $(SHAREDIR)/img
-	./assets/gen/img/splash.sh $@
-
-$(SHAREDIR)/LICENSE: LICENSE
-	mkdir -p $(SHAREDIR)
-	cp $> $^ $@
 
 .PHONY: clean
 clean:
