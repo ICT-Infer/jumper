@@ -275,11 +275,7 @@ BUILDTYPE != sh -c '[ ! -z "$(BUILDTYPE)" ] && echo "$(BUILDTYPE)" || echo "debu
 DEBUG != sh -c '[ "$(BUILDTYPE)" = "debug" ] && echo "-g -O0 -DDEBUG" || echo "-O2"'
 CFLAGS += $(DEBUG)
 
-CONFIGLVL1 = $(HOST_TRIPLET)
-CONFIGLVL2 = $(CONFIGLVL1)/$(MAKE)+$(CC)
-CONFIGLVL3 = $(CONFIGLVL2)/$(BUILDTYPE)
-CONFIGLVL4 = $(CONFIGLVL3)/$(TARGET_TRIPLET)
-CONFIGID = $(CONFIGLVL4)
+CONFIGID = $(HOST_TRIPLET)/$(MAKE)+$(CC)/$(BUILDTYPE)/$(TARGET_TRIPLET)
 
 OUT != sh -c '[ ! -z "$(OUT)" ] && echo "$(OUT)" || echo "out"'
 OUTDIR = $(OUT)/$(CONFIGID)
