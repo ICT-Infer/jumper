@@ -351,12 +351,16 @@ here_we_go:
 			}
 		}
 
+		// TODO: Register and act upon collisions
+
+		// TODO: step_simulation(&sim, tstart, tcurr, tdiff);
+
 		SDL_RenderClear(rend);
 
 		SDL_GetWindowSize(win, &w, &h);
-		seventyfive(splashtex, &splashrect, w, h);
 
-		SDL_RenderCopy(rend, splashtex, NULL, &splashrect);
+		// TODO: Render game frame
+
 		SDL_RenderPresent(rend);
 
 		MEASURE_TIMEDELTA_NS(tdiff, tprev, tcurr)
