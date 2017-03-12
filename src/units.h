@@ -18,6 +18,7 @@
 #define _JUMPER_UNITS_H
 
 #include <stdint.h>
+#include <inttypes.h>
 
 #define INV_NANO  1000000000
 #define INV_MICRO    1000000
@@ -55,6 +56,7 @@ typedef uint64_t micrograms;
  * (2^64 * 1e-9) = 18 446 744 073.709551616
  */
 typedef uint64_t nanometers;
+#define JPR_NS PRIu64
 typedef uint64_t nanoseconds;
 typedef uint64_t nanometers_per_second;
 

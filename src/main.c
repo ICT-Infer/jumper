@@ -19,6 +19,7 @@
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <time.h>
 #include <math.h>
 #include <stdbool.h>
 
@@ -29,7 +30,24 @@
 #define WINDOW_WIDTH 640
 #define WINDOW_HEIGHT 480
 
-void seventyfive (SDL_Texture * tex, SDL_Rect * rect, int w, int h)
+#define MEASURE_TIMEDELTA_NS(tdiff, tprev, tcurr) \
+	tprev = tcurr; \
+	clock_gettime(CLOCK_REALTIME_PRECISE, &tcurr); \
+	tdiff = get_tdiff(tprev, tcurr);
+
+static inline nanoseconds get_ns (struct timespec tspec)
+{
+	return ((nanoseconds) tspec.tv_nsec + (tspec.tv_sec * INV_NANO));
+}
+
+static inline nanoseconds get_tdiff (
+	struct timespec tprev, struct timespec tcurr)
+{
+	return get_ns(tcurr) - get_ns(tprev);
+}
+
+static inline void seventyfive (
+	SDL_Texture * tex, SDL_Rect * rect, int w, int h)
 {
 	int stw, sth;
 	SDL_QueryTexture(tex, NULL, NULL, &stw, &sth);
@@ -55,6 +73,16 @@ int main (int argc, char *argv[])
 {
 	// Status
 	int exits = EXIT_SUCCESS;
+
+	struct timespec tprev, tcurr;
+	nanoseconds tdiff;
+
+	if (clock_gettime(CLOCK_REALTIME_PRECISE, &tcurr))
+	{
+		fprintf(stderr, "Failed to read clock.\n");
+		exits = EXIT_FAILURE;
+		goto quit_main;
+	}
 
 	int fw, fh, fx, fy; // fullscreen
 	int bt = 0, bl = 0, bb = 0, br = 0; // borders
@@ -167,8 +195,9 @@ int main (int argc, char *argv[])
 	SDL_RenderCopy(rend, splashtex, NULL, &splashrect);
 	SDL_RenderPresent(rend);
 
+	MEASURE_TIMEDELTA_NS(tdiff, tprev, tcurr)
 #ifdef DEBUG
-	fprintf(stderr, "Window ready.\n");
+	fprintf(stderr, "Window ready after %" JPR_NS " ns.\n", tdiff);
 #endif
 
 	SDL_Delay(800);
@@ -245,9 +274,10 @@ int main (int argc, char *argv[])
 	);
 */
 #endif
-
+	MEASURE_TIMEDELTA_NS(tdiff, tprev, tcurr)
 #ifdef DEBUG
-	fprintf(stderr, "About to enter main loop.\n");
+	fprintf(stderr, "About to enter main loop after %" JPR_NS " ns.\n",
+		tdiff);
 #endif
 
 	bool quit = false;
@@ -269,6 +299,11 @@ int main (int argc, char *argv[])
 
 		SDL_RenderCopy(rend, splashtex, NULL, &splashrect);
 		SDL_RenderPresent(rend);
+
+		MEASURE_TIMEDELTA_NS(tdiff, tprev, tcurr)
+#ifdef DEBUG
+	fprintf(stderr, "Iteration completed in %" JPR_NS " ns.\n", tdiff);
+#endif
 	}
 
 
