@@ -32,7 +32,8 @@
 
 #define MEASURE_TIMEDELTA_NS(tdiff, tprev, tcurr) \
 	tprev = tcurr; \
-	clock_gettime(CLOCK_REALTIME_PRECISE, &tcurr); \
+	clock_gettime(CLOCK_REALTIME_PRECISE, &tspec); \
+	tcurr = get_ns(tspec); \
 	tdiff = get_tdiff(tprev, tcurr);
 
 static inline nanoseconds get_ns (struct timespec tspec)
@@ -40,10 +41,9 @@ static inline nanoseconds get_ns (struct timespec tspec)
 	return ((nanoseconds) tspec.tv_nsec + (tspec.tv_sec * INV_NANO));
 }
 
-static inline nanoseconds get_tdiff (
-	struct timespec tprev, struct timespec tcurr)
+static inline nanoseconds get_tdiff (nanoseconds tprev, nanoseconds tcurr)
 {
-	return get_ns(tcurr) - get_ns(tprev);
+	return tcurr - tprev;
 }
 
 static inline void seventyfive (
@@ -74,15 +74,16 @@ int main (int argc, char *argv[])
 	// Status
 	int exits = EXIT_SUCCESS;
 
-	struct timespec tprev, tcurr;
-	nanoseconds tdiff, tstart;
+	struct timespec tspec;
+	nanoseconds tprev, tcurr, tdiff, tstart;
 
-	if (clock_gettime(CLOCK_REALTIME_PRECISE, &tcurr))
+	if (clock_gettime(CLOCK_REALTIME_PRECISE, &tspec))
 	{
 		fprintf(stderr, "Failed to read clock.\n");
 		exits = EXIT_FAILURE;
 		goto quit_main;
 	}
+	tcurr = get_ns(tspec);
 
 	int fw, fh, fx, fy; // fullscreen
 	int bt = 0, bl = 0, bb = 0, br = 0; // borders
@@ -330,7 +331,7 @@ here_we_go:
 #endif
 
 	MEASURE_TIMEDELTA_NS(tdiff, tprev, tcurr)
-	tstart = get_ns(tcurr);
+	tstart = tcurr;
 	tdiff = 0;
 
 	while (!quit)
