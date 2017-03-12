@@ -75,7 +75,7 @@ int main (int argc, char *argv[])
 	int exits = EXIT_SUCCESS;
 
 	struct timespec tprev, tcurr;
-	nanoseconds tdiff;
+	nanoseconds tdiff, tstart;
 
 	if (clock_gettime(CLOCK_REALTIME_PRECISE, &tcurr))
 	{
@@ -276,12 +276,19 @@ int main (int argc, char *argv[])
 #endif
 	MEASURE_TIMEDELTA_NS(tdiff, tprev, tcurr)
 #ifdef DEBUG
-	fprintf(stderr, "About to enter main loop after %" JPR_NS " ns.\n",
-		tdiff);
+	fprintf(stderr, "About to enter first main loop "
+			"after %" JPR_NS " ns.\n", tdiff);
 #endif
 
 	bool quit = false;
 	SDL_Event evt;
+
+main_menu:
+
+#ifdef DEBUG
+	fprintf(stderr, "Main menu.\n");
+#endif
+
 	while (!quit)
 	{
 		while (SDL_PollEvent(&evt))
@@ -289,6 +296,57 @@ int main (int argc, char *argv[])
 			if (evt.type == SDL_QUIT)
 			{
 				quit = true;
+			}
+			else if (evt.type == SDL_JOYBUTTONUP ||
+				evt.type == SDL_FINGERUP ||
+				evt.type == SDL_KEYUP ||
+				evt.type == SDL_MOUSEBUTTONUP)
+			{
+				goto here_we_go;
+			}
+		}
+
+		SDL_RenderClear(rend);
+
+		SDL_GetWindowSize(win, &w, &h);
+		seventyfive(splashtex, &splashrect, w, h);
+
+		SDL_RenderCopy(rend, splashtex, NULL, &splashrect);
+		SDL_RenderPresent(rend);
+
+		MEASURE_TIMEDELTA_NS(tdiff, tprev, tcurr)
+
+/*
+#ifdef DEBUG
+	fprintf(stderr, "Iteration completed in %" JPR_NS " ns.\n", tdiff);
+#endif
+*/
+	}
+
+here_we_go:
+
+#ifdef DEBUG
+	fprintf(stderr, "Here we go!\n");
+#endif
+
+	MEASURE_TIMEDELTA_NS(tdiff, tprev, tcurr)
+	tstart = get_ns(tcurr);
+	tdiff = 0;
+
+	while (!quit)
+	{
+		while (SDL_PollEvent(&evt))
+		{
+			if (evt.type == SDL_QUIT)
+			{
+				quit = true;
+			}
+			else if (evt.type == SDL_JOYBUTTONUP ||
+				evt.type == SDL_FINGERUP ||
+				evt.type == SDL_KEYUP ||
+				evt.type == SDL_MOUSEBUTTONUP)
+			{
+				goto main_menu;
 			}
 		}
 
@@ -305,7 +363,6 @@ int main (int argc, char *argv[])
 	fprintf(stderr, "Iteration completed in %" JPR_NS " ns.\n", tdiff);
 #endif
 	}
-
 
 cleanup_sdlsplash:
 
