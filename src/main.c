@@ -55,7 +55,6 @@ int main (int argc, char *argv[])
 {
 	// Status
 	int exits = EXIT_SUCCESS;
-	int ops = 0;
 
 	int fw, fh, fx, fy; // fullscreen
 	int bt = 0, bl = 0, bb = 0, br = 0; // borders
@@ -177,7 +176,7 @@ int main (int argc, char *argv[])
 	const char levelname[] = "Level 1";
 
 	mesh3d levelmesh;
-	if ((ops = loadmesh3d(&levelmesh, "meshes/level1")))
+	if (loadmesh3d(&levelmesh, "meshes/level1"))
 	{
 		fprintf(stderr, "Failed to load mesh.\n");
 		exits = EXIT_FAILURE;
