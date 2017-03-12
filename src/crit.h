@@ -14,25 +14,25 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-#define CRIT(condition, lbl, errmsg) \
+#define CRIT(condition, errmsg) \
 	if (condition) \
 	{ \
 		fprintf(stderr, "Failed to " errmsg ".\n"); \
 		exits = EXIT_FAILURE; \
-		goto lbl; \
+		goto CLEANUP; \
 	}
 
-#define CRIT_SDL_OR_TTF(condition, lbl, errmsg, sys_geterror) \
+#define CRIT_SDL_OR_TTF(condition, errmsg, sys_geterror) \
 	if (condition) \
 	{ \
 		fprintf(stderr, "Failed to " errmsg ". Error: %s.\n", \
 			sys_geterror()); \
 		exits = EXIT_FAILURE; \
-		goto lbl; \
+		goto CLEANUP; \
 	}
 
-#define CRIT_TTF(condition, lbl, errmsg) \
-	CRIT_SDL_OR_TTF(condition, lbl, errmsg, TTF_GetError)
+#define CRIT_TTF(condition, errmsg) \
+	CRIT_SDL_OR_TTF(condition, errmsg, TTF_GetError)
 
-#define CRIT_SDL(condition, lbl, errmsg) \
-	CRIT_SDL_OR_TTF(condition, lbl, errmsg, SDL_GetError)
+#define CRIT_SDL(condition, errmsg) \
+	CRIT_SDL_OR_TTF(condition, errmsg, SDL_GetError)

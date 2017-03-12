@@ -57,6 +57,8 @@ static inline void seventyfive (
 
 int main (int argc, char *argv[])
 {
+#define CLEANUP quit_main
+
 	// Status
 	int exits = EXIT_SUCCESS;
 
@@ -68,28 +70,30 @@ int main (int argc, char *argv[])
 	fprintf(stderr, "This is a DEBUG build.\n\n");
 
 	char cwd[PATH_MAX];
-	CRIT(!getcwd(cwd, sizeof(cwd)), quit_main, "get current working dir")
+	CRIT(!getcwd(cwd, sizeof(cwd)), "get current working dir")
 
 	fprintf(stderr, "Current working directory: %s.\n", cwd);
 #endif
 
-	CRIT(clock_gettime(CLOCK_REALTIME_PRECISE, &tspec), quit_main,
-		"read clock")
+	CRIT(clock_gettime(CLOCK_REALTIME_PRECISE, &tspec), "read clock")
 	tcurr = get_ns(tspec);
 
 	int fw, fh, fx, fy; // fullscreen
 	int bt = 0, bl = 0, bb = 0, br = 0; // borders
 	int w, h, x, y; // window
 
-	CRIT_TTF(TTF_Init(), quit_main, "initialize TTF")
+	CRIT_TTF(TTF_Init(), "initialize TTF")
+
+#define CLEANUP cleanup_ttfinit
 
 	TTF_Font * msgfont;
 	CRIT_TTF(!(msgfont =
 			TTF_OpenFont("fonts/open-sans/OpenSans-Regular.ttf",
-				96)), cleanup_ttfinit, "open font")
+				96)), "open font")
 
-	CRIT_SDL(SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER), quit_main,
-		"initialize SDL")
+	CRIT_SDL(SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER), "initialize SDL")
+
+#define CLEANUP cleanup_sdlinit
 
 	SDL_Window * win;
 	CRIT_SDL(!(win = SDL_CreateWindow("jumper",
@@ -97,7 +101,9 @@ int main (int argc, char *argv[])
 			WINDOW_WIDTH, WINDOW_HEIGHT,
 			SDL_WINDOW_FULLSCREEN_DESKTOP |
 			SDL_WINDOW_HIDDEN | SDL_WINDOW_RESIZABLE )),
-		cleanup_sdlinit, "create SDL window")
+		"create SDL window")
+
+#define CLEANUP cleanup_sdlwindow
 
 	SDL_GetWindowSize(win, &fw, &fh);
 	SDL_GetWindowPosition(win, &fx, &fy);
@@ -114,7 +120,7 @@ int main (int argc, char *argv[])
 	SDL_SetWindowSize(win, w, h);
 
 	CRIT_SDL(SDL_GetWindowBordersSize(win, &bt, &bl, &bb, &br),
-		cleanup_sdlinit, "get SDL window size")
+		"get SDL window size")
 
 	if (!bt)
 	{
@@ -141,18 +147,22 @@ int main (int argc, char *argv[])
 	SDL_Renderer * rend;
 	CRIT_SDL(!(rend = SDL_CreateRenderer(win, -1,
 			SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC)),
-		cleanup_sdlwindow, "create SDL renderer")
+		"create SDL renderer")
+
+#define CLEANUP cleanup_sdlrenderer
 
 	SDL_Color black = {0, 0, 0};
 
 	SDL_Surface * splashsurf;
 	CRIT_SDL(!(splashsurf = IMG_Load("img/splash.png")),
-		cleanup_sdlrenderer, "create SDL surface")
+		"create SDL surface")
 
 	SDL_Texture * splashtex =
 		SDL_CreateTextureFromSurface(rend, splashsurf);
 	SDL_FreeSurface(splashsurf);
-	CRIT_SDL(!splashtex, cleanup_sdlrenderer, "create SDL texture")
+	CRIT_SDL(!splashtex, "create SDL texture")
+
+#define CLEANUP cleanup_sdlsplash
 
 	int stw, sth;
 	SDL_QueryTexture(splashtex, NULL, NULL, &stw, &sth);
@@ -164,11 +174,11 @@ int main (int argc, char *argv[])
 
 	SDL_Surface * msgsurf;
 	CRIT_TTF(!(msgsurf = TTF_RenderText_Solid(msgfont, "LOADING", black)),
-		cleanup_sdlsplash, "create SDL surface")
+		"create SDL surface")
 
 	SDL_Texture * msgtex = SDL_CreateTextureFromSurface(rend, msgsurf);
 	SDL_FreeSurface(msgsurf);
-	CRIT_SDL(!msgtex, cleanup_sdlsplash, "create SDL texture")
+	CRIT_SDL(!msgtex, "create SDL texture")
 
 	int mtw, mth;
 	SDL_QueryTexture(msgtex, NULL, NULL, &mtw, &mth);

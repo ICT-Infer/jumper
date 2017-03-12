@@ -322,7 +322,7 @@ PROJUID = {}-$(PROJECT)
 MAKE != sh -c '[ ! -z "$(MAKE)" ] && echo "$(MAKE)" || echo "make"'
 CC != sh -c '[ ! -z "$(CC)" ] && echo "$(CC)" || echo "cc"'
 
-CFLAGS = -Wall -Werror -I/usr/local/include
+CFLAGS = -Wall -I/usr/local/include
 LDFLAGS = -L/usr/local/lib
 LDLIBS = -lSDL2 -lSDL2_image -lSDL2_ttf -lm
 
