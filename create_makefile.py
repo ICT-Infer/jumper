@@ -20,9 +20,11 @@ import sys, os
 
 debug = False
 
+usagemsg = 'Usage: ' + sys.argv[0] + ' -d | <Makefile>\n'
+
 def invalid_set_of_args ():
 
-    sys.stderr.write('Usage: ' + sys.argv[0] + ' -d | <Makefile>\n')
+    sys.stderr.write(usagemsg)
     sys.exit(1)
 
 if len(sys.argv) != 2:
