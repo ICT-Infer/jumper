@@ -180,6 +180,8 @@ int main (int argc, char *argv[])
 	SDL_FreeSurface(msgsurf);
 	CRIT_SDL(!msgtex, "create SDL texture")
 
+#define CLEANUP cleanup_sdlmsg
+
 	int mtw, mth;
 	SDL_QueryTexture(msgtex, NULL, NULL, &mtw, &mth);
 
@@ -214,7 +216,7 @@ int main (int argc, char *argv[])
 	{
 		fprintf(stderr, "Failed to load mesh.\n");
 		exits = EXIT_FAILURE;
-		goto cleanup_sdlmsg;
+		goto CLEANUP;
 	}
 
 	world level;
