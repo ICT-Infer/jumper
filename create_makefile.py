@@ -95,15 +95,15 @@ class FileRef:
 
 class Source (FileRef):
 
-    def __init__ (self, fname, search_assoc = None):
+    def __init__ (self, fname, search_assocs = None):
 
         super(Source, self).__init__(fname)
 
-        self.search_assoc = search_assoc
+        self.search_assocs = search_assocs
 
         self.directly_associated_fnames = []
 
-        if not(search_assoc is None):
+        if not(search_assocs is None):
 
             self.directly_associated_fnames = \
                 self.get_directly_associated_fnames()
@@ -114,8 +114,24 @@ class Source (FileRef):
 
         for fname in self.directly_associated_fnames:
 
-            directly_associated.append( \
-                self.search_assoc[self.search_assoc.index(fname)])
+            found = None
+
+            for search_assoc in self.search_assocs:
+
+                try:
+
+                    found = search_assoc[search_assoc.index(fname)]
+                    break
+
+                except ValueError:
+
+                    pass
+
+            if not found:
+
+                raise ValueError('Not in any of the search_assocs.')
+
+            directly_associated.append(found)
 
         self.directly_associated = directly_associated
 
@@ -142,6 +158,10 @@ class Cfile (Source):
     get_directly_associated_fnames = c_style_local_include_fnames
 
 class Hfile (Source):
+
+    get_directly_associated_fnames = c_style_local_include_fnames
+
+class Incfile (Source):
 
     get_directly_associated_fnames = c_style_local_include_fnames
 
@@ -193,6 +213,14 @@ class Copyfile (FileRef):
 
         super(Copyfile, self).__init__(fname)
 
+        if os.path.isfile(str(self)):
+
+            self.src = str(self)
+
+        else:
+
+            self.src = os.path.join('assets', str(self))
+
     def mfstr (self):
 
         return \
@@ -200,13 +228,14 @@ class Copyfile (FileRef):
 $(SHAREDIR)/{}: {}
 	mkdir -p $(SHAREDIR)/{}
 	cp {} $@
-""".format(str(self), str(self), os.path.dirname(str(self)), str(self))
+""".format(str(self), self.src, os.path.dirname(str(self)), self.src)
 
 project = os.path.basename(os.path.dirname(os.path.realpath(__file__)))
 projprefix = 'github-eriknstr'
 
 cfiles = []
 hfiles = []
+incfiles = []
 
 dir = 'src'
 for file in os.listdir(dir):
@@ -215,14 +244,19 @@ for file in os.listdir(dir):
 
     if file.endswith('.c'):
 
-        cfiles.append(Cfile(f, hfiles))
+        cfiles.append(Cfile(f, [hfiles, incfiles]))
 
     elif file.endswith('.h'):
 
-        hfiles.append(Hfile(f, hfiles))
+        hfiles.append(Hfile(f, [hfiles]))
+
+    elif file.endswith('.inc'):
+
+        hfiles.append(Incfile(f, [hfiles]))
 
 cfiles.sort()
 hfiles.sort()
+incfiles.sort()
 
 for fref in cfiles + hfiles:
 
@@ -257,6 +291,8 @@ mf_gennedfiles = ' '.join([os.path.join('$(SHAREDIR)',str(gennedfile))
 
 copyfiles = []
 copyfiles.append(Copyfile('LICENSE'))
+copyfiles.append(Copyfile('fonts/open-sans/LICENSE.txt'))
+copyfiles.append(Copyfile('fonts/open-sans/OpenSans-Regular.ttf'))
 copyfiles.sort()
 
 mf_copyfiles = ' '.join([os.path.join('$(SHAREDIR)',str(copyfile))
@@ -288,7 +324,7 @@ CC != sh -c '[ ! -z "$(CC)" ] && echo "$(CC)" || echo "cc"'
 
 CFLAGS = -Wall -Werror -I/usr/local/include
 LDFLAGS = -L/usr/local/lib
-LDLIBS = -lSDL2 -lSDL2_image -lm
+LDLIBS = -lSDL2 -lSDL2_image -lSDL2_ttf -lm
 
 HOST_TRIPLET != sh -c '$(CC) -dumpmachine || echo $$(uname -m)-unknown-$$(uname -s)'
 
