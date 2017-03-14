@@ -60,12 +60,13 @@ most_recent_set_of_values ()
 
 trap most_recent_set_of_values EXIT
 
-[ -f create_makefile.py ] || err "Could not find file \`create_makefile.py'."
+[ -f buildtools/create_makefile.py ] || \
+  err "Could not find file \`buildtools/create_makefile.py'."
 
 host_os=`uname -o`
 
 if [ -f buildrecipe ] ; then
-  ./create_makefile.py buildrecipe.new || exit 1
+  ./buildtools/create_makefile.py buildrecipe.new || exit 1
   set +e
   cmp -s buildrecipe buildrecipe.new
   if [ "$?" -ne "0" ] ; then
@@ -76,7 +77,7 @@ if [ -f buildrecipe ] ; then
   fi
   set -e
 else
-  ./create_makefile.py buildrecipe || exit 1
+  ./buildtools/create_makefile.py buildrecipe || exit 1
   echo "buildrecipe updated" 1>&2
 fi
 

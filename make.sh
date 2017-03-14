@@ -47,7 +47,7 @@ if [ -f "$HOME/build/.allow_from_any" ] ; then
 fi
 
 if [ -f buildrecipe ] ; then
-  ./create_makefile.py buildrecipe.new || exit 1
+  ./buildtools/create_makefile.py buildrecipe.new || exit 1
   cmp -s buildrecipe buildrecipe.new
   if [ "$?" -ne "0" ] ; then
     echo "buildrecipe updated" 1>&2
@@ -56,7 +56,7 @@ if [ -f buildrecipe ] ; then
     rm buildrecipe.new
   fi
 else
-  ./create_makefile.py buildrecipe || exit 1
+  ./buildtools/create_makefile.py buildrecipe || exit 1
   echo "buildrecipe updated" 1>&2
 fi
 

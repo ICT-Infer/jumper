@@ -69,7 +69,7 @@ BUILDTYPE=release ./make.sh
 ## Build platforms tested
 
 Currently the following build platforms are tested by manually
-triggering the script `meta/allbuilds.sh`.
+triggering the script `buildtools/allbuilds.sh`.
 
 TODO: Continuous Integration proper.
 
