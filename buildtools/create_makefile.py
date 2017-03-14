@@ -232,7 +232,7 @@ $(SHAREDIR)/{}: {}
 	cp {} $@
 """.format(str(self), self.src, os.path.dirname(str(self)), self.src)
 
-project = os.path.basename(os.path.dirname(os.path.realpath(__file__)))
+project = 'jumper'
 projprefix = 'github-eriknstr'
 
 cfiles = []
