@@ -20,13 +20,13 @@ Video game.
 FreeBSD 11.0-RELEASE:
 
 ```bash
-doas pkg install sdl2 sdl2_image sdl2_ttf
+doas pkg install python3 sdl2 sdl2_image sdl2_ttf
 ```
 
 Fedora 25:
 
 ```bash
-sudo dnf install gcc make SDL2 SDL2-devel \
+sudo dnf install python3 gcc make SDL2 SDL2-devel \
 	SDL2_image SDL2_image-devel SDL2_ttf SDL2_ttf-devel
 ```
 
