@@ -16,8 +16,20 @@
 
 #include <time.h>
 
+#ifdef __FreeBSD__
+#define JUMPER_CLOCK CLOCK_REALTIME_PRECISE
+#define _CLOCK_GETTIME
+#elif __linux__
+#define JUMPER_CLOCK CLOCK_REALTIME
+#define _CLOCK_GETTIME
+#else
+#error "System currently not supported."
+#endif
+
+#ifdef _CLOCK_GETTIME
 #define GETTIME(TGT) \
-	clock_gettime(CLOCK_REALTIME_PRECISE, TGT)
+	clock_gettime(JUMPER_CLOCK, TGT)
+#endif
 
 #define MEASURE_TIMEDELTA_NS(tdiff, tprev, tcurr) \
 	tprev = tcurr; \
