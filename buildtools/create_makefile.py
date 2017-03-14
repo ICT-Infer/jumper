@@ -384,7 +384,7 @@ distclean:
 	test -d $(OUT)/$(PROJUID) && cd $(OUT) && rm -rf $(PROJUID) || true
 
 .PHONY: run
-run: $(MAIN_EXECUTABLE) $(DYNASTS)
+run: all
 	cd $(SHAREDIR) && $(MAIN_EXECUTABLE)
 
 .PHONY: targets
