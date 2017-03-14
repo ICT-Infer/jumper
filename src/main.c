@@ -75,7 +75,7 @@ int main (int argc, char *argv[])
 	fprintf(stderr, "Current working directory: %s.\n", cwd);
 #endif
 
-	CRIT(clock_gettime(CLOCK_REALTIME_PRECISE, &tspec), "read clock")
+	CRIT(GETTIME(&tspec), "read clock")
 	tcurr = get_ns(tspec);
 
 	int fw, fh, fx, fy; // fullscreen

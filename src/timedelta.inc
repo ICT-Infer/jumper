@@ -16,9 +16,12 @@
 
 #include <time.h>
 
+#define GETTIME(TGT) \
+	clock_gettime(CLOCK_REALTIME_PRECISE, TGT)
+
 #define MEASURE_TIMEDELTA_NS(tdiff, tprev, tcurr) \
 	tprev = tcurr; \
-	clock_gettime(CLOCK_REALTIME_PRECISE, &tspec); \
+	GETTIME(&tspec); \
 	tcurr = get_ns(tspec); \
 	tdiff = get_tdiff(tprev, tcurr);
 
