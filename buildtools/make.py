@@ -18,37 +18,65 @@
 
 import sys, os
 
+flags = []
+longopts = []
+varcount = 0
 targets_requested = []
+
+debug = False # don't change this value -- use debug flag '-d'.
 
 if __name__ == '__main__':
 
     usage = 'Usage: ' + sys.argv[0] \
-        + ' [<variable>=<value> ...] [<target> ...]'
+        + ' [-h] | [-d]' \
+        + ' | [<variable>=<value> ...] [<target> ...]'
 
-    for arg in sys.argv:
+    def improper_usage ():
 
-        if arg == '-h' or arg == '--help':
-
-            print(usage)
-            exit(0)
+        sys.stderr.write(usage + '\n')
+        exit(1)
 
     for arg in sys.argv[1:]:
 
-        if '=' in arg:
+        if arg[0:1] == '--':
+
+            if varcount or len(targets_requested):
+
+                improper_usage()
+
+            longopts.append(arg)
+
+        elif arg[0] == '-':
+
+            if varcount or len(targets_requested):
+
+                improper_usage()
+
+            flags.append(arg)
+
+        elif '=' in arg:
 
             if len(targets_requested):
 
-                sys.stderr.write(usage + '\n')
-                exit(1)
+                improper_usage()
 
             k, v = arg.split('=', 1)
-            print(v)
 
             os.environ[k] = v
+            varcount += 1
 
         else:
 
             targets_requested.append(arg)
+
+    if '-h' in flags or '--help' in longopts:
+
+        print(usage)
+        exit(0)
+
+    if '-d' in flags or '--debug' in longopts:
+
+        debug = True
 
 from state.projectstate import ProjectState
 from state.buildstate import BuildState
@@ -57,7 +85,7 @@ import project as p
 curr_state_project = ProjectState(p.__file__,
     p.project_name, p.project_name_prefix, p.project_directory, p.get_targets)
 
-if __name__ == '__main__':
+if debug:
 
     curr_state_project.targets.write_all_recdeps_pretty(sys.stderr)
 
@@ -81,7 +109,7 @@ else:
 
     builddir = os.path.join(curr_state_project.project_directory, 'build')
 
-if __name__ == '__main__':
+if debug:
 
     sys.stderr.write("Using builddir `" + builddir + "'.\n")
 
@@ -93,7 +121,7 @@ else:
 
     outdir = os.path.join(curr_state_project.project_directory, 'out')
 
-if __name__ == '__main__':
+if debug:
 
     sys.stderr.write("Using outdir `" + outdir + "'.\n\n")
 
@@ -107,8 +135,10 @@ curr_state_build = BuildState(curr_state_project, os.environ, builddir, outdir)
 #
 #        sys.stderr.write(sys.argv[0] + ': Nothing to be done for "' +)
 
-if __name__ == '__main__':
+if debug:
 
     sys.stderr.write(repr(curr_state_build) + '\n\n')
+
+if __name__ == '__main__':
 
     raise NotImplementedError
