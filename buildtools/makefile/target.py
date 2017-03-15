@@ -28,7 +28,7 @@ class Targets (list):
 
 class Target:
 
-    def __init__ (self, name):
+    def __init__ (self, name, rule=None):
 
         self.name = name
 
@@ -39,6 +39,14 @@ class Target:
         self._recursive_deps = { 'self': self, 'deps': [] }
 
         self._recursive_deps_list_stale = False
+
+        if rule is None:
+
+            self.rule = Rule(self)
+
+        else:
+
+            self.rule = rule
 
     def __str__ (self):
 
@@ -90,9 +98,9 @@ class Target:
 
 class Phony (Target):
 
-    def __init__ (self, name):
+    def __init__ (self, name, rule=None):
 
-        super(Phony, self).__init__(name)
+        super(Phony, self).__init__(name, rule)
 
         self.fname = None
 
@@ -102,17 +110,17 @@ class Phony (Target):
 
 class NoArch (Target):
 
-    def __init__ (self, name):
+    def __init__ (self, name, rule=None):
 
-        super(NoArch, self).__init__(name)
+        super(NoArch, self).__init__(name, rule)
 
         self.fname = os.path.join('no-arch', name)
 
 class ShareFile (NoArch):
 
-    def __init__ (self, name):
+    def __init__ (self, name, rule=None):
 
-        super(ShareFile, self).__init__(name)
+        super(ShareFile, self).__init__(name, rule)
 
         self.fname = os.path.join('share', name)
 
@@ -124,8 +132,8 @@ class Arch (Target):
 
 class BinFile (Arch):
 
-    def __init__ (self, name):
+    def __init__ (self, name, rule=None):
 
-        super(BinFile, self).__init__(name)
+        super(BinFile, self).__init__(name, rule)
 
         self.fname = os.path.join('bin', name)
