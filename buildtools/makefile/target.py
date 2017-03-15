@@ -58,11 +58,11 @@ class Target:
 
             deps_recursive = []
 
-            for dep in self.deps:
+            for dep in self._direct_deps:
 
                 deps_recursive.append(dep.get_deps_recursive())
 
-            self._recursive_deps.deps = deps_recursive
+            self._recursive_deps['deps'] = deps_recursive
 
         return self._recursive_deps
 
