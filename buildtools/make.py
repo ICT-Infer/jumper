@@ -28,8 +28,7 @@ debug = False # don't change this value -- use debug flag '-d'.
 if __name__ == '__main__':
 
     usage = 'Usage: ' + sys.argv[0] \
-        + ' [-h] | [-d]' \
-        + ' | [<variable>=<value> ...] [<target> ...]'
+        + ' [-h] | [-d] [<variable>=<value> ...] [<target> ...]'
 
     def improper_usage ():
 
