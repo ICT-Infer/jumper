@@ -17,4 +17,4 @@
 #
 
 from project import *
-from buildstate import BuildState
+from state.buildstate import BuildState

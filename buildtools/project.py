@@ -20,7 +20,7 @@ project_name = 'jumper'
 project_name_prefix = 'github-eriknstr'
 project_directory = '..'
 
-from projectstate import ProjectState
+from state.projectstate import ProjectState
 from makefile.target import Targets, Phony, BinFile
 
 def jumper_targets (self):
