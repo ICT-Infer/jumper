@@ -111,6 +111,6 @@ curr_state_build = BuildState(curr_state_project, os.environ, builddir, outdir)
 
 if __name__ == '__main__':
 
-    sys.stderr.write(curr_state_build.__repr__() + '\n\n')
+    sys.stderr.write(repr(curr_state_build) + '\n\n')
 
     raise NotImplementedError

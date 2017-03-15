@@ -34,8 +34,6 @@ class BuildState ():
 
     def __repr__ (self):
 
-        ps_repr = self.project_state.__repr__()
-        env_repr = self.env.__repr__()
-
-        return type(self).__name__ + "(" + ps_repr + ", " \
-            + env_repr + ", '" + self.builddir + "', '" + self.outdir + "')"
+        return type(self).__name__ + "(" + repr(self.project_state) + ", " \
+            + repr(self.env) + ", '" + self.builddir + "', '" \
+            + self.outdir + "')"
