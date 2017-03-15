@@ -57,8 +57,8 @@ import project as p
 curr_state_project = ProjectState(p.__file__,
     p.project_name, p.project_name_prefix, p.project_directory, p.get_targets)
 
-builddir = 'build'
-outdir = 'out'
+builddir = None
+outdir = None
 
 home = os.path.expanduser("~")
 subdir = p.project_name_prefix + '-' + p.project_name
@@ -71,6 +71,10 @@ if os.path.isfile(tb_allow):
 
     builddir = try_builddir
 
+else:
+
+    builddir = os.path.join(curr_state_project.project_directory, 'build')
+
 if __name__ == '__main__':
 
     sys.stderr.write("Using builddir `" + builddir + "'.\n")
@@ -78,6 +82,10 @@ if __name__ == '__main__':
 if os.path.isfile(to_allow):
 
     outdir = try_outdir
+
+else:
+
+    outdir = os.path.join(curr_state_project.project_directory, 'out')
 
 if __name__ == '__main__':
 
