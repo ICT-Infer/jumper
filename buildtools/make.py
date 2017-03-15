@@ -61,12 +61,13 @@ builddir = 'build'
 outdir = 'out'
 
 home = os.path.expanduser("~")
-try_builddir = os.path.join(home, 'build')
-tb_allow = os.path.join(try_builddir, '.allow_from_any')
-try_outdir = os.path.join(home, 'out')
-to_allow = os.path.join(try_outdir, '.allow_from_any')
+subdir = p.project_name_prefix + '-' + p.project_name
+try_builddir = os.path.join(home, 'build', subdir)
+tb_allow = os.path.join(home, 'build', '.allow_from_any')
+try_outdir = os.path.join(home, 'out', subdir)
+to_allow = os.path.join(home, 'out', '.allow_from_any')
 
-if os.path.isdir(try_builddir) and os.path.isfile(tb_allow):
+if os.path.isfile(tb_allow):
 
     builddir = try_builddir
 
@@ -74,7 +75,7 @@ if __name__ == '__main__':
 
     sys.stderr.write("Using builddir `" + builddir + "'.\n")
 
-if os.path.isdir(try_outdir) and os.path.isfile(to_allow):
+if os.path.isfile(to_allow):
 
     outdir = try_outdir
 
