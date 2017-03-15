@@ -57,6 +57,14 @@ import project as p
 curr_state_project = ProjectState(p.__file__,
     p.project_name, p.project_name_prefix, p.project_directory, p.get_targets)
 
+sys.stderr.write(repr(curr_state_project.targets) + '\n\n')
+
+if __name__ == '__main__':
+
+    for target in curr_state_project.targets:
+
+        sys.stderr.write(repr(target.get_deps_recursive()) + '\n\n')
+
 builddir = None
 outdir = None
 
@@ -89,7 +97,7 @@ else:
 
 if __name__ == '__main__':
 
-    sys.stderr.write("Using outdir `" + outdir + "'.\n")
+    sys.stderr.write("Using outdir `" + outdir + "'.\n\n")
 
 curr_state_build = BuildState(curr_state_project, os.environ, builddir, outdir)
 
@@ -103,6 +111,6 @@ curr_state_build = BuildState(curr_state_project, os.environ, builddir, outdir)
 
 if __name__ == '__main__':
 
-    sys.stderr.write(curr_state_build.__repr__() + '\n')
+    sys.stderr.write(curr_state_build.__repr__() + '\n\n')
 
     raise NotImplementedError

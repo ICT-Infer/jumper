@@ -30,6 +30,8 @@ class Target:
 
         self.name = name
 
+        self.fname = name
+
         self._direct_deps = []
 
         self._recursive_deps = { 'self': self, 'deps': [] }
@@ -66,22 +68,62 @@ class Target:
 
         return self._recursive_deps
 
+    def is_out_of_date (self):
+
+        if not(os.path.isfile(self.fname)):
+
+            return True
+
+        for dep in self.get_deps_recursive():
+
+            if dep.is_out_of_date():
+
+                return True
+
+            if dep.last_modified() >= self.last_modified():
+
+                return True
+
+        return False
+
 class Phony (Target):
 
-    pass
+    def __init__ (self, name):
+
+        super(Phony, self).__init__(name)
+
+        self.fname = None
+
+    def is_out_of_date (self):
+
+        return True
 
 class NoArch (Target):
 
-    pass
+    def __init__ (self, name):
+
+        super(NoArch, self).__init__(name)
+
+        self.fname = os.path.join('no-arch', name)
 
 class ShareFile (NoArch):
 
-    pass
+    def __init__ (self, name):
+
+        super(ShareFile, self).__init__(name)
+
+        self.fname = os.path.join('share', name)
 
 class Arch (Target):
+
+    # XXX: Triplet is inserted into fname at the BuildState stage, not here.
 
     pass
 
 class BinFile (Arch):
 
-    pass
+    def __init__ (self, name):
+
+        super(BinFile, self).__init__(name)
+
+        self.fname = os.path.join('bin', name)
