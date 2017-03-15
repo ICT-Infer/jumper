@@ -23,6 +23,7 @@ class BuildState ():
     def __init__ (self, project_state, env, builddir, outdir):
 
         self.project_state = project_state
+        self.env = env
 
         cwd_saved = os.getcwd()
 
@@ -36,6 +37,7 @@ class BuildState ():
     def __repr__ (self):
 
         ps_repr = self.project_state.__repr__()
+        env_repr = self.env.__repr__()
 
-        return type(self).__name__ + "(" + ps_repr + ", '" \
-            + self.builddir + "', '" + self.outdir + "')"
+        return type(self).__name__ + "(" + ps_repr + ", " \
+            + env_repr + ", '" + self.builddir + "', '" + self.outdir + "')"
