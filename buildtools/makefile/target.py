@@ -17,6 +17,7 @@
 #
 
 import os
+from makefile.rule import Rule
 
 class Targets (list):
 
