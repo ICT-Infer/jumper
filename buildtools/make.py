@@ -57,20 +57,11 @@ import project as p
 curr_state_project = ProjectState(p.__file__,
     p.project_name, p.project_name_prefix, p.project_directory, p.get_targets)
 
-sys.stderr.write(repr(curr_state_project.targets) + '\n\n')
-
 if __name__ == '__main__':
 
-    from makefile.target import write_recdeps_pretty
+    curr_state_project.targets.write_all_recdeps_pretty(sys.stderr)
 
-    for recdeps in [target.get_deps_recursive() \
-            for target in curr_state_project.targets]:
-
-        sys.stderr.write(repr(recdeps) + '\n\n')
-
-        write_recdeps_pretty(sys.stderr, recdeps)
-
-        sys.stderr.write('\n')
+    sys.stderr.write('\n')
 
 builddir = None
 outdir = None

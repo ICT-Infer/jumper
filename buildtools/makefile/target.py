@@ -17,26 +17,6 @@
 import os
 from makefile.rule import Rule
 
-class Targets (list):
-
-    def add (self, target):
-
-        super(Targets, self).append(target)
-
-        return target
-
-class RecursiveDeps:
-
-    def __init__ (self, target, recdeps):
-
-        self.target = target
-        self.recdeps = recdeps
-
-    def __repr__ (self):
-
-        return type(self).__name__ + '(' + repr(self.target) + ', ' \
-            + repr(self.recdeps) + ')'
-
 def write_recdeps_pretty (f, recdeps, depth = 0):
 
     f.write(' ' * (2 * depth) + repr(recdeps.target))
@@ -50,6 +30,32 @@ def write_recdeps_pretty (f, recdeps, depth = 0):
     for recdep in recdeps.recdeps:
 
         write_recdeps_pretty(f, recdep, depth + 1)
+
+class Targets (list):
+
+    def add (self, target):
+
+        super(Targets, self).append(target)
+
+        return target
+
+    def write_all_recdeps_pretty (self, f):
+
+        for target in self:
+
+            write_recdeps_pretty(f, target.get_deps_recursive())
+
+class RecursiveDeps:
+
+    def __init__ (self, target, recdeps):
+
+        self.target = target
+        self.recdeps = recdeps
+
+    def __repr__ (self):
+
+        return type(self).__name__ + '(' + repr(self.target) + ', ' \
+            + repr(self.recdeps) + ')'
 
 class Target:
 
