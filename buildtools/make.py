@@ -101,6 +101,8 @@ curr_state_build = BuildState(curr_state_project, os.environ, builddir, outdir)
 #
 #        sys.stderr.write(sys.argv[0] + ': Nothing to be done for "' +)
 
-sys.stderr.write(curr_state_build.__repr__() + '\n')
+if __name__ == '__main__':
 
-raise NotImplementedError
+    sys.stderr.write(curr_state_build.__repr__() + '\n')
+
+    raise NotImplementedError
