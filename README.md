@@ -89,7 +89,7 @@ TODO: Continuous Integration proper.
 
 ## Run
 
-NOTE: If you defined the `CC` during the build stage,
+NOTE: If you defined `CC` during the build stage,
 ensure that the same value is provided still.
 
 ```bash
@@ -100,7 +100,7 @@ ensure that the same value is provided still.
 
 ### Clean for target platform
 
-NOTE: If you defined the `CC` during the build stage,
+NOTE: If you defined `CC` during the build stage,
 ensure that the same value is provided still.
 
 ```bash
@@ -109,7 +109,7 @@ ensure that the same value is provided still.
 
 ### Distclean for target platform
 
-NOTE: If you defined the `CC` during the build stage,
+NOTE: If you defined `CC` during the build stage,
 ensure that the same value is provided still.
 
 ```bash
