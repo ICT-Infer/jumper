@@ -50,8 +50,14 @@ if __name__ == '__main__':
 
             targets_requested.append(arg)
 
-from project import *
+from state.projectstate import ProjectState
 from state.buildstate import BuildState
+import project as p
+
+sys.stderr.write(p.__file__)
+
+curr_state_project = ProjectState(p.__file__,
+    p.project_name, p.project_name_prefix, p.project_directory, p.get_targets)
 
 builddir = 'build'
 outdir = 'out'

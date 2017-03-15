@@ -20,7 +20,7 @@ import os
 
 class ProjectState ():
 
-    def __init__ (self,
+    def __init__ (self, project_file,
             project_name, project_name_prefix, project_directory, targets):
 
         self.project_name = project_name
@@ -29,7 +29,7 @@ class ProjectState ():
 
         cwd_saved = os.getcwd()
 
-        os.chdir(os.path.dirname(os.path.realpath(__file__)))
+        os.chdir(os.path.dirname(os.path.realpath(project_file)))
 
         self.project_directory = os.path.realpath(project_directory)
 

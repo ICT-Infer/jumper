@@ -20,10 +20,9 @@ project_name = 'jumper'
 project_name_prefix = 'github-eriknstr'
 project_directory = '..'
 
-from state.projectstate import ProjectState
 from makefile.target import Targets, Phony, BinFile
 
-def jumper_targets (self):
+def get_targets (self):
 
     targets = Targets()
 
@@ -34,6 +33,3 @@ def jumper_targets (self):
     run.add_direct_dep(all)
 
     return targets
-
-curr_state_project = ProjectState(
-    project_name, project_name_prefix, project_directory, jumper_targets)
