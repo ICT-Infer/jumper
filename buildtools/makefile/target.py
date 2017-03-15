@@ -25,6 +25,32 @@ class Targets (list):
 
         return target
 
+class RecursiveDeps:
+
+    def __init__ (self, target, recdeps):
+
+        self.target = target
+        self.recdeps = recdeps
+
+    def __repr__ (self):
+
+        return type(self).__name__ + '(' + repr(self.target) + ', ' \
+            + repr(self.recdeps) + ')'
+
+def write_recdeps_pretty (f, recdeps, depth = 0):
+
+    f.write(' ' * (2 * depth) + repr(recdeps.target))
+
+    if not(recdeps.target.fname is None):
+
+        f.write(', fname = ' + recdeps.target.fname)
+
+    f.write('\n')
+
+    for recdep in recdeps.recdeps:
+
+        write_recdeps_pretty(f, recdep, depth + 1)
+
 class Target:
 
     def __init__ (self, name, rule=None):
@@ -35,9 +61,9 @@ class Target:
 
         self._direct_deps = []
 
-        self._recursive_deps = { 'self': self, 'deps': [] }
+        self._recdeps = RecursiveDeps(self, [])
 
-        self._recursive_deps_list_stale = False
+        self._recdeps_list_stale = False
 
         if rule is None:
 
@@ -59,23 +85,23 @@ class Target:
 
         self._direct_deps.append(dep)
 
-        self._recursive_deps_list_stale = True
+        self._recdeps_list_stale = True
 
         return dep
 
     def get_deps_recursive (self):
 
-        if self._recursive_deps_list_stale:
+        if self._recdeps_list_stale:
 
-            deps_recursive = []
+            recdeps = []
 
             for dep in self._direct_deps:
 
-                deps_recursive.append(dep.get_deps_recursive())
+                recdeps.append(dep.get_deps_recursive())
 
-            self._recursive_deps['deps'] = deps_recursive
+            self._recdeps.recdeps = recdeps
 
-        return self._recursive_deps
+        return self._recdeps
 
     def is_out_of_date (self):
 

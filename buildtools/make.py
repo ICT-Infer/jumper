@@ -61,9 +61,16 @@ sys.stderr.write(repr(curr_state_project.targets) + '\n\n')
 
 if __name__ == '__main__':
 
-    for target in curr_state_project.targets:
+    from makefile.target import write_recdeps_pretty
 
-        sys.stderr.write(repr(target.get_deps_recursive()) + '\n\n')
+    for recdeps in [target.get_deps_recursive() \
+            for target in curr_state_project.targets]:
+
+        sys.stderr.write(repr(recdeps) + '\n\n')
+
+        write_recdeps_pretty(sys.stderr, recdeps)
+
+        sys.stderr.write('\n')
 
 builddir = None
 outdir = None
