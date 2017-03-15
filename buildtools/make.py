@@ -51,7 +51,7 @@ if __name__ == '__main__':
             targets_requested.append(arg)
 
 from project import *
-from build import *
+from state.buildstate import BuildState
 
 builddir = 'build'
 outdir = 'out'
